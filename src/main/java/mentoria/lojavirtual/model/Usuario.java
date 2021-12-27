@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -41,6 +42,10 @@ public class Usuario implements UserDetails{
 	@Temporal(TemporalType.DATE)
 	private Date dataSenha;
 	
+	@ManyToOne(targetEntity = Pessoa.class)
+	@JoinColumn(name = "pessoa_id", nullable = false, foreignKey = 
+	@ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk"))
+	private Pessoa pessoa;
 	
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "usuario_acesso", uniqueConstraints = @UniqueConstraint(columnNames = {"usuario_id", "acesso_id"},
@@ -51,6 +56,14 @@ public class Usuario implements UserDetails{
 	foreignKey = @ForeignKey(name = "acesso_fk", value =  ConstraintMode.CONSTRAINT)))
 	private List<Acesso> acessos;
 
+	public void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
+	}
+	
+	public Pessoa getPessoa() {
+		return pessoa;
+	}
+	
 	/*Autoridades: são os acessos, ou seja, ROLE_ADMIN, ROLE_SECRETARIO*/
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
