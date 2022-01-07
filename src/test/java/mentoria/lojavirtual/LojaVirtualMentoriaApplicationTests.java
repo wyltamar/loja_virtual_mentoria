@@ -14,8 +14,8 @@ public class LojaVirtualMentoriaApplicationTests {
 	@Autowired
 	private AcessoService acessoService;
 	
-	@Autowired
-	private AcessoRepository acessoRepository;
+	//@Autowired
+	//private AcessoRepository acessoRepository;
 	
 	@Test
 	public void testCadastraAcesso() {
@@ -23,7 +23,7 @@ public class LojaVirtualMentoriaApplicationTests {
 		Acesso acesso = new Acesso();
 		acesso.setDescricao("ROLE_USER");
 		
-		acessoRepository.save(acesso);
+		acessoService.save(acesso);
 	}
 
 }
