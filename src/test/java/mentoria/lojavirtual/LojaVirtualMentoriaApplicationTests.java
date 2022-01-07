@@ -1,13 +1,29 @@
 package mentoria.lojavirtual;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class LojaVirtualMentoriaApplicationTests {
+import mentoria.lojavirtual.model.Acesso;
+import mentoria.lojavirtual.repository.AcessoRepository;
+import mentoria.lojavirtual.service.AcessoService;
 
+@SpringBootTest(classes = LojaVirtualMentoriaApplication.class)
+public class LojaVirtualMentoriaApplicationTests {
+
+	@Autowired
+	private AcessoService acessoService;
+	
+	@Autowired
+	private AcessoRepository acessoRepository;
+	
 	@Test
-	void contextLoads() {
+	public void testCadastraAcesso() {
+		
+		Acesso acesso = new Acesso();
+		acesso.setDescricao("ROLE_USER");
+		
+		acessoRepository.save(acesso);
 	}
 
 }
