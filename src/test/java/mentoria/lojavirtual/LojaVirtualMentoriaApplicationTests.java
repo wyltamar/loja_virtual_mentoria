@@ -12,11 +12,6 @@ import mentoria.lojavirtual.service.AcessoService;
 @SpringBootTest(classes = LojaVirtualMentoriaApplication.class)
 public class LojaVirtualMentoriaApplicationTests {
 
-	//@Autowired
-	//private AcessoService acessoService;
-	
-	//@Autowired
-	//private AcessoRepository acessoRepository;
 	
 	@Autowired
 	private AcessoController acessoController;
@@ -25,7 +20,7 @@ public class LojaVirtualMentoriaApplicationTests {
 	public void testCadastraAcesso() {
 		
 		Acesso acesso = new Acesso();
-		acesso.setDescricao("ROLE_USER");
+		acesso.setDescricao("ROLE_ADMIN");
 		
 		acessoController.salvarAcesso(acesso);
 	}
