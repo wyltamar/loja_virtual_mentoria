@@ -6,8 +6,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import mentoria.lojavirtual.controller.AcessoController;
 import mentoria.lojavirtual.model.Acesso;
-import mentoria.lojavirtual.repository.AcessoRepository;
-import mentoria.lojavirtual.service.AcessoService;
 
 @SpringBootTest(classes = LojaVirtualMentoriaApplication.class)
 public class LojaVirtualMentoriaApplicationTests {
