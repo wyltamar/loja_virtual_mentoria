@@ -34,6 +34,18 @@ public class JWTTokenAutenticacaoService {
 					setSubject(username). /*Adiciona o user*/
 					setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))./*Tempo de expiração*/
 					signWith(SignatureAlgorithm.HS512, SECRET).compact();
+		
+		/*Exemplo: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
+		 * 				  eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.
+		 * 				  SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c */
+		String token = TOKEN_PREFIX + " " + JWT;
+		
+		/*Dar a resposta para a tela e para outro cliente, ex. outra API, navegador, aplicativo, javascript, 
+		 * outra chamada java*/
+		response.addHeader(HEADER_STRING, token);
+		
+		/*Usados para ver no Postman para teste*/
+		response.getWriter().write("{\"Autorization\": \"" + token + "\"}");
 	}
 	
 }
