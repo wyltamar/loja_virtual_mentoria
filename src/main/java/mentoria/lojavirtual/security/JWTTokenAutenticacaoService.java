@@ -31,9 +31,9 @@ public class JWTTokenAutenticacaoService {
 		
 		/*Montagem do token*/
 		String JWT = Jwts.builder(). /*Chama o gerador de token*/
-					setSubject(username). /*Adiciona o user*/
-					setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))./*Tempo de expiração*/
-					signWith(SignatureAlgorithm.HS512, SECRET).compact();
+					 setSubject(username). /*Adiciona o user*/
+					 setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))./*Tempo de expiração*/
+					 signWith(SignatureAlgorithm.HS512, SECRET).compact();
 		
 		/*Exemplo: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
 		 * 				  eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.
