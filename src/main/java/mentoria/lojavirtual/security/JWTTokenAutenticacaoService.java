@@ -2,13 +2,19 @@ package mentoria.lojavirtual.security;
 
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import mentoria.lojavirtual.ApplicationContextLoad;
+import mentoria.lojavirtual.model.Usuario;
+import mentoria.lojavirtual.repository.UsuarioRepository;
 
 /*Cria e retorna a autenticação JWT*/
 @Service
@@ -47,6 +53,44 @@ public class JWTTokenAutenticacaoService {
 		
 		/*Usados para ver no Postman para teste*/
 		response.getWriter().write("{\"Autorization\": \"" + token + "\"}");
+	}
+	
+	/*Método que retorna o usuáiro validado com token ou caso não seja válido retorna null*/
+	public Authentication getAuthentication(HttpServletRequest request, HttpServletResponse response) {
+		
+		String token = request.getHeader(HEADER_STRING);
+		
+		if(token != null) {
+			
+			String tokenLimpo = token.replace(TOKEN_PREFIX, "").trim();
+			
+			/*Faz a validação do token do usuário na requisição e obtem o User*/
+			
+			String user = Jwts.parser().
+						  setSigningKey(SECRET).
+						  parseClaimsJws(tokenLimpo).
+						  getBody().getSubject();
+			
+			if(user != null) {
+				
+				Usuario usuario = ApplicationContextLoad.
+								  getApplicationContext().
+								  getBean(UsuarioRepository.class).findUsuarioByLogin(user);
+				
+				if(usuario != null) {
+					
+					return new UsernamePasswordAuthenticationToken(
+							usuario.getLogin(),
+							usuario.getSenha(),
+							usuario.getAuthorities());
+				}
+								  
+			}
+			
+		}
+		
+		liberacaoCors(response);
+		return null;
 	}
 	
 	/*Fazendo liberação contra erro de Cors no navegador*/
