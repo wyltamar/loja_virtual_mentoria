@@ -1,5 +1,6 @@
 package mentoria.lojavirtual.security;
 
+import java.io.IOException;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,8 +11,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
 import mentoria.lojavirtual.ApplicationContextLoad;
 import mentoria.lojavirtual.model.Usuario;
 import mentoria.lojavirtual.repository.UsuarioRepository;
@@ -21,7 +24,7 @@ import mentoria.lojavirtual.repository.UsuarioRepository;
 @Component
 public class JWTTokenAutenticacaoService {
 	
-	/*token com validade de 3 dias*/
+	/*token com validade de 3 dias */
 	private static final long EXPIRATION_TIME = 950400000;
 	
 	/*Chave de senha para juntar com o JWT*/
@@ -56,40 +59,54 @@ public class JWTTokenAutenticacaoService {
 	}
 	
 	/*Método que retorna o usuáiro validado com token ou caso não seja válido retorna null*/
-	public Authentication getAuthentication(HttpServletRequest request, HttpServletResponse response) {
+	public Authentication getAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
 		String token = request.getHeader(HEADER_STRING);
 		
-		if(token != null) {
+		try {
 			
-			String tokenLimpo = token.replace(TOKEN_PREFIX, "").trim();
-			
-			/*Faz a validação do token do usuário na requisição e obtem o User*/
-			
-			String user = Jwts.parser().
-						  setSigningKey(SECRET).
-						  parseClaimsJws(tokenLimpo).
-						  getBody().getSubject();
-			
-			if(user != null) {
+			if(token != null) {
 				
-				Usuario usuario = ApplicationContextLoad.
-								  getApplicationContext().
-								  getBean(UsuarioRepository.class).findUsuarioByLogin(user);
+				String tokenLimpo = token.replace(TOKEN_PREFIX, "").trim();
 				
-				if(usuario != null) {
+				/*Faz a validação do token do usuário na requisição e obtem o User*/
+				
+				String user = Jwts.parser().
+							  setSigningKey(SECRET).
+							  parseClaimsJws(tokenLimpo).
+							  getBody().getSubject();
+				
+				if(user != null) {
 					
-					return new UsernamePasswordAuthenticationToken(
-							usuario.getLogin(),
-							usuario.getSenha(),
-							usuario.getAuthorities());
+					Usuario usuario = ApplicationContextLoad.
+									  getApplicationContext().
+									  getBean(UsuarioRepository.class).findUsuarioByLogin(user);
+					
+					if(usuario != null) {
+						
+						return new UsernamePasswordAuthenticationToken(
+								usuario.getLogin(),
+								usuario.getSenha(),
+								usuario.getAuthorities());
+					}
+									  
 				}
-								  
+				
 			}
 			
+		}catch (SignatureException e) {
+			
+			response.getWriter().write("Token inválido!");
+			
+		}catch(ExpiredJwtException e) {
+			response.getWriter().write("Token expirado, faça login novamente!");
+		}finally {
+			
+			liberacaoCors(response);
 		}
 		
-		liberacaoCors(response);
+		
+	
 		return null;
 	}
 	
