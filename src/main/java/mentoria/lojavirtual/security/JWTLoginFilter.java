@@ -8,12 +8,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import mentoria.lojavirtual.model.Usuario;
 
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
@@ -53,6 +56,17 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 		}
 	}
 
-	
+	@Override
+	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+			AuthenticationException failed) throws IOException, ServletException {
+		
+		if(failed instanceof BadCredentialsException) {
+			response.getWriter().write("Usuario e senha não encontrado!");
+		}else {
+			response.getWriter().write("Flha ao logar:" +failed.getMessage());
+		}
+		
+		//super.unsuccessfulAuthentication(request, response, failed);
+	}
 
 }
