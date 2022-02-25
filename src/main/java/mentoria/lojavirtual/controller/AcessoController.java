@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import mentoria.lojavirtual.ExceptionMentoriaJava;
 import mentoria.lojavirtual.model.Acesso;
 import mentoria.lojavirtual.repository.AcessoRepository;
 import mentoria.lojavirtual.service.AcessoService;
@@ -58,9 +59,13 @@ public class AcessoController {
 	
 	@ResponseBody 
 	@GetMapping(value = "**/obterAcesso/{id}")
-	public ResponseEntity<Acesso> obterAcesso(@PathVariable("id") Long id) { 
+	public ResponseEntity<Acesso> obterAcesso(@PathVariable("id") Long id) throws ExceptionMentoriaJava { 
 		
-		Acesso acesso = acessoRepository.findById(id).get();
+		Acesso acesso = acessoRepository.findById(id).orElse(null);
+		
+		if(acesso == null) {
+			throw new ExceptionMentoriaJava("Acesso com código: "+id+" não existe em nossa base de dados");
+		}
 		
 		return new ResponseEntity<Acesso>(acesso, HttpStatus.OK);
 	}
