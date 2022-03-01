@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
-import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -19,7 +18,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import junit.framework.TestCase;
 import mentoria.lojavirtual.controller.AcessoController;
 import mentoria.lojavirtual.model.Acesso;
@@ -186,7 +184,7 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase {
 	}
 	
 	@Test
-	public void testCadastraAcesso() {
+	public void testCadastraAcesso() throws ExceptionMentoriaJava {
 		
 		Acesso acesso = new Acesso();
 		acesso.setDescricao("ROLE_ADMIN");
