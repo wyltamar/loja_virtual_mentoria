@@ -1,5 +1,6 @@
 package mentoria.lojavirtual;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -44,7 +45,7 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase {
 		MockMvc mockMvc = builder.build();
 		
 		Acesso acesso = new Acesso();
-		acesso.setDescricao("ROLE_COMPRADOR");
+		acesso.setDescricao("ROLE_COMPRADOR" +Calendar.getInstance().getTimeInMillis());
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		
@@ -186,8 +187,10 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase {
 	@Test
 	public void testCadastraAcesso() throws ExceptionMentoriaJava {
 		
+		String descAcesso = "ROLE_ADMIN"+Calendar.getInstance().getTimeInMillis();
+		
 		Acesso acesso = new Acesso();
-		acesso.setDescricao("ROLE_ADMIN");
+		acesso.setDescricao(descAcesso);
 		
 		/*Validando se o id realmente está nulo, pois ele deve ser nulo antes de gravar no banco de dados*/
 		
@@ -203,7 +206,7 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase {
 		
 		/*Validar dados salvos da forma correta*/
 		
-		assertEquals("ROLE_ADMIN", acesso.getDescricao());
+		assertEquals(descAcesso, acesso.getDescricao());
 		
 		/*Teste de carregamento de dados vindos do banco*/
 		
