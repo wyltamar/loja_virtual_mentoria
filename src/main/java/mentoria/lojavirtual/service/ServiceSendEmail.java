@@ -27,12 +27,12 @@ public class ServiceSendEmail {
 		
 		Properties properties = new Properties();
 		properties.put("mail.smtp.ssl.trust", "*");
-		properties.put("mail.smtp.auth", true);
-		properties.put("mail.smtp.starttls", false);
+		properties.put("mail.smtp.auth", "true");
+		properties.put("mail.smtp.starttls", "false");
 		properties.put("mail.smtp.host", "smtp.gmail.com");
 		properties.put("mail.smtp.port", "465");
 		properties.put("mail.smtp.socketFactory.port", "465");
-		properties.put("mail.smtp.socketFactory.port.class", "javax.net.sslSSLSocketFactory");
+		properties.put("mail.smtp.socketFactory.port.class", "javax.net.ssl.SSLSocketFactory");
 		
 		Session session = Session.getInstance(properties, new Authenticator() {
 			
