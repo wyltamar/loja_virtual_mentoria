@@ -72,7 +72,7 @@ public class PessoaUserService {
 			mensagemHtml.append("<b>Obrigado!!<br>");
 			
 			try {
-			serviceSendEmail.enviarEmail("Acesso gerado para a loja virtual", mensagemHtml.toString(), juridica.getEmail());
+				serviceSendEmail.enviarEmail("Acesso gerado para a loja virtual", mensagemHtml.toString(), juridica.getEmail());
 			}catch(Exception e) {
 				e.printStackTrace();
 			}
