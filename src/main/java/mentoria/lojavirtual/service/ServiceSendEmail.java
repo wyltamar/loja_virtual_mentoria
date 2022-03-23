@@ -51,7 +51,7 @@ public class ServiceSendEmail {
 		message.setFrom(new InternetAddress(userName, "Wyltamar - WDTEC", "UTF-8"));
 		message.setRecipients(Message.RecipientType.TO, toUser);
 		message.setSubject(assunto);
-		message.setContent(message, "text/html; charset=utf-8");
+		message.setContent(mensagem, "text/html; charset=utf-8");
 		
 		Transport.send(message);
 		

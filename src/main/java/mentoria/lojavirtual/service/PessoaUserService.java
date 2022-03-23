@@ -66,10 +66,10 @@ public class PessoaUserService {
 			
 			StringBuilder mensagemHtml = new StringBuilder();
 			
-			mensagemHtml.append("<b>Segue abaixo os seus dados de acesso para a loja virtual<b>");
-			mensagemHtml.append("<b>Login: <b>"+juridica.getEmail()+ "<br>");
-			mensagemHtml.append("<b>Senha: <b>"+senha+ "<br><br>");
-			mensagemHtml.append("<b>Obrigado!!<br>");
+			mensagemHtml.append("<b>Segue abaixo os seus dados de acesso para a loja virtual</b><br>");
+			mensagemHtml.append("<b>Login:</b> ").append(juridica.getEmail()).append("<br>");
+			mensagemHtml.append("<b>Senha:</b> ").append(senha).append("<br>");
+			mensagemHtml.append("<b>Obrigado!!</b>");
 			
 			try {
 				serviceSendEmail.enviarEmail("Acesso gerado para a loja virtual", mensagemHtml.toString(), juridica.getEmail());
