@@ -1,5 +1,7 @@
 package mentoria.lojavirtual.repository;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,6 +16,9 @@ public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
 
 	@Query(value = "select u from Usuario u where u.login = ?1")
 	Usuario findUsuarioByLogin(String login);
+	
+	@Query(value = "select u from Usuario u where u.dataAtualSenha <= current_date - 13")
+	List<Usuario> usuarioSenhaVencida();
 
 	@Query(value="select constraint_name from information_schema.constraint_column_usage \r\n" + 
 			" where table_name = 'usuario_acesso' and column_name = 'acesso_id'\r\n" + 
