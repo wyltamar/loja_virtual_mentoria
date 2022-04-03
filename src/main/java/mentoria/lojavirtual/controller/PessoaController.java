@@ -13,6 +13,7 @@ import mentoria.lojavirtual.ExceptionMentoriaJava;
 import mentoria.lojavirtual.model.PessoaJuridica;
 import mentoria.lojavirtual.repository.PessoaRepository;
 import mentoria.lojavirtual.service.PessoaUserService;
+import mentoria.lojavirtual.util.ValidaCnpj;
 
 @Controller
 @RestController
@@ -38,6 +39,10 @@ public class PessoaController {
 		
 		if(pessoaJuridica.getId() == null && pessoaRepository.existeInscEstadualCadastrado(pessoaJuridica.getInscEstadual()) != null) {
 			throw new ExceptionMentoriaJava("Já existe Pessoa Jurídica cadastrada com a inscrição estadual: "+pessoaJuridica.getInscEstadual());
+		}
+		
+		if(!ValidaCnpj.isCNPJ(pessoaJuridica.getCnpj())) {
+			throw new ExceptionMentoriaJava("CNPJ: "+pessoaJuridica.getCnpj()+" é inválido.");
 		}
 		
 		pessoaJuridica = pessoaUserService.salvarPessoaJuridica(pessoaJuridica);
