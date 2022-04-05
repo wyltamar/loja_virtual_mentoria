@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import mentoria.lojavirtual.ExceptionMentoriaJava;
+import mentoria.lojavirtual.model.PessoaFisica;
 import mentoria.lojavirtual.model.PessoaJuridica;
 import mentoria.lojavirtual.repository.PessoaRepository;
 import mentoria.lojavirtual.service.PessoaUserService;
+import mentoria.lojavirtual.util.ValidaCPF;
 import mentoria.lojavirtual.util.ValidaCnpj;
 
 @Controller
@@ -49,5 +51,28 @@ public class PessoaController {
 		
 		return new ResponseEntity<PessoaJuridica>(pessoaJuridica, HttpStatus.OK);
 	}
+	
+	@ResponseBody
+	@PostMapping(value = "**/salvarPf")
+	public ResponseEntity<PessoaFisica> salvarPf(@RequestBody PessoaFisica pessoaFisica) throws ExceptionMentoriaJava{
+		
+		if(pessoaFisica == null) {
+			throw new ExceptionMentoriaJava("Não podemos cadastrar Pessoa Física como NULL");
+		}
+		
+		if(pessoaFisica.getId() == null && pessoaRepository.existeCpfCadastrado(pessoaFisica.getCpf()) != null ) {
+			throw new ExceptionMentoriaJava("Já existe Pessoa Física cadastrada com o cpf: "+pessoaFisica.getCpf());
+		}
+		
+
+		if(!ValidaCPF.isCPF(pessoaFisica.getCpf())) {
+			throw new ExceptionMentoriaJava("CPF: "+pessoaFisica.getCpf()+" é inválido.");
+		}
+		
+		pessoaFisica = pessoaUserService.salvarPessoaFisica(pessoaFisica);
+		
+		return new ResponseEntity<PessoaFisica>(pessoaFisica, HttpStatus.OK);
+	}
+
 
 }
