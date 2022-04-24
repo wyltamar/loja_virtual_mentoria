@@ -1,10 +1,13 @@
 package mentoria.lojavirtual.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +22,7 @@ import mentoria.lojavirtual.model.PessoaFisica;
 import mentoria.lojavirtual.model.PessoaJuridica;
 import mentoria.lojavirtual.model.dto.CepDTO;
 import mentoria.lojavirtual.repository.EnderecoRepository;
+import mentoria.lojavirtual.repository.PessoaFisicaRepository;
 import mentoria.lojavirtual.repository.PessoaRepository;
 import mentoria.lojavirtual.service.PessoaUserService;
 import mentoria.lojavirtual.util.ValidaCPF;
@@ -32,10 +36,48 @@ public class PessoaController {
 	private PessoaRepository pessoaRepository;
 	
 	@Autowired
+	private PessoaFisicaRepository pessoaFisicaRepository;
+	
+	@Autowired
 	private PessoaUserService pessoaUserService;
 	
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+	
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+	
+	@ResponseBody
+	@GetMapping(value = "**/consultaPfNome/{nome}")
+	public ResponseEntity<List<PessoaFisica>> consultaPfNome(@PathVariable("nome") String nome){
+		
+		List<PessoaFisica> fisicas = pessoaFisicaRepository.pesquisaPorNomePF(nome.trim().toUpperCase());
+		
+		jdbcTemplate.execute("begin; update acessos_end_point set qtd_acesso_end_point = qtd_acesso_end_point + 1 where nome_end_point = 'CONSULTA_PF_NOME'; commit;");
+		
+		return new ResponseEntity<List<PessoaFisica>>(fisicas,HttpStatus.OK);
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "**/consultaPfCpf/{cpf}")
+	public ResponseEntity<List<PessoaFisica>> consultaPfCpf(@PathVariable("cpf") String cpf){
+		
+		return new ResponseEntity<List<PessoaFisica>>(pessoaFisicaRepository.existeCpfCadastradoList(cpf),HttpStatus.OK);
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "**/consultaPjNome/{nome}")
+	public ResponseEntity<List<PessoaJuridica>> consultaPjNome(@PathVariable("nome") String nome){
+		
+		return new ResponseEntity<List<PessoaJuridica>>(pessoaRepository.pesquisaPorNomePJ(nome.trim().toUpperCase()),HttpStatus.OK);
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "**/consultaCnpjPj/{cnpj}")
+	public ResponseEntity<List<PessoaJuridica>> consultaCnpjPj(@PathVariable("cnpj") String cnpj){
+		
+		return new ResponseEntity<List<PessoaJuridica>>(pessoaRepository.existeCnpjCadastradoList(cnpj),HttpStatus.OK);
+	}
 	
 	@ResponseBody
 	@GetMapping(value = "**/consultaCep/{cep}")
@@ -111,7 +153,7 @@ public class PessoaController {
 			throw new ExceptionMentoriaJava("Não podemos cadastrar Pessoa Física como NULL");
 		}
 		
-		if(pessoaFisica.getId() == null && pessoaRepository.existeCpfCadastrado(pessoaFisica.getCpf()) != null ) {
+		if(pessoaFisica.getId() == null && pessoaFisicaRepository.existeCpfCadastrado(pessoaFisica.getCpf()) != null ) {
 			throw new ExceptionMentoriaJava("Já existe Pessoa Física cadastrada com o cpf: "+pessoaFisica.getCpf());
 		}
 		
