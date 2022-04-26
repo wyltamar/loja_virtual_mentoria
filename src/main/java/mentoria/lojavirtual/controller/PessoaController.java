@@ -162,6 +162,37 @@ public class PessoaController {
 			throw new ExceptionMentoriaJava("CPF: "+pessoaFisica.getCpf()+" é inválido.");
 		}
 		
+		if(pessoaFisica.getId() == null || pessoaFisica.getId() < 0) {
+			
+			for(int pos = 0; pos < pessoaFisica.getEnderecos().size(); pos++) {
+				
+				CepDTO cepDTO2 = pessoaUserService.consultaCep(pessoaFisica.getEnderecos().get(pos).getCep());
+				
+				pessoaFisica.getEnderecos().get(pos).setBairro(cepDTO2.getBairro());
+				pessoaFisica.getEnderecos().get(pos).setCidade(cepDTO2.getLocalidade());
+				pessoaFisica.getEnderecos().get(pos).setComplemento(cepDTO2.getComplemento());
+				pessoaFisica.getEnderecos().get(pos).setLogradouro(cepDTO2.getLogradouro());
+				pessoaFisica.getEnderecos().get(pos).setUf(cepDTO2.getUf());
+			}
+		}else {
+			
+			for(int pos = 0; pos < pessoaFisica.getEnderecos().size(); pos++) {
+				
+				Endereco enderecoTemp2 = enderecoRepository.findById(pessoaFisica.getEnderecos().get(pos).getId()).get();
+				
+				if(!enderecoTemp2.getCep().equals(pessoaFisica.getEnderecos().get(pos).getCep())) {
+					
+					CepDTO cepDTO2 = pessoaUserService.consultaCep(pessoaFisica.getEnderecos().get(pos).getCep());
+					
+					pessoaFisica.getEnderecos().get(pos).setBairro(cepDTO2.getBairro());
+					pessoaFisica.getEnderecos().get(pos).setCidade(cepDTO2.getLocalidade());
+					pessoaFisica.getEnderecos().get(pos).setComplemento(cepDTO2.getComplemento());
+					pessoaFisica.getEnderecos().get(pos).setLogradouro(cepDTO2.getLogradouro());
+					pessoaFisica.getEnderecos().get(pos).setUf(cepDTO2.getUf());
+				}
+			}
+		}
+		
 		pessoaFisica = pessoaUserService.salvarPessoaFisica(pessoaFisica);
 		
 		return new ResponseEntity<PessoaFisica>(pessoaFisica, HttpStatus.OK);
