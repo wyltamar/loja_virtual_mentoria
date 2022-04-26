@@ -70,7 +70,7 @@ public class ControleExcecoes extends ResponseEntityExceptionHandler {
 
 		ex.printStackTrace();
 		try {
-			serviceSendEmail.enviarEmail("Alerta de erro na Loja Virtual", ExceptionUtils.getStackTrace(ex), "wyltamarjavadev@gmail.com");
+			serviceSendEmail.enviarEmail("Alerta de erro na Loja Virtual", ExceptionUtils.getStackTrace(ex), "wyltamar.dougladesousaoliveir@gmail.com");
 		} catch (UnsupportedEncodingException | MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
