@@ -7,7 +7,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +23,7 @@ import mentoria.lojavirtual.model.dto.CepDTO;
 import mentoria.lojavirtual.repository.EnderecoRepository;
 import mentoria.lojavirtual.repository.PessoaFisicaRepository;
 import mentoria.lojavirtual.repository.PessoaRepository;
+import mentoria.lojavirtual.service.AcessoEndPointService;
 import mentoria.lojavirtual.service.PessoaUserService;
 import mentoria.lojavirtual.util.ValidaCPF;
 import mentoria.lojavirtual.util.ValidaCnpj;
@@ -45,7 +45,7 @@ public class PessoaController {
 	private EnderecoRepository enderecoRepository;
 	
 	@Autowired
-	private JdbcTemplate jdbcTemplate;
+	private AcessoEndPointService acessoEndPointService;
 	
 	@ResponseBody
 	@GetMapping(value = "**/consultaPfNome/{nome}")
@@ -53,7 +53,7 @@ public class PessoaController {
 		
 		List<PessoaFisica> fisicas = pessoaFisicaRepository.pesquisaPorNomePF(nome.trim().toUpperCase());
 		
-		jdbcTemplate.execute("begin; update acessos_end_point set qtd_acesso_end_point = qtd_acesso_end_point + 1 where nome_end_point = 'CONSULTA_PF_NOME'; commit;");
+		acessoEndPointService.qtdAcessoEndPoint(("CONSULTA_PF_NOME").trim().toUpperCase());
 		
 		return new ResponseEntity<List<PessoaFisica>>(fisicas,HttpStatus.OK);
 	}
