@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import mentoria.lojavirtual.ExceptionMentoriaJava;
+import mentoria.lojavirtual.enums.TipoPessoa;
 import mentoria.lojavirtual.model.Endereco;
 import mentoria.lojavirtual.model.PessoaFisica;
 import mentoria.lojavirtual.model.PessoaJuridica;
 import mentoria.lojavirtual.model.dto.CepDTO;
+import mentoria.lojavirtual.model.dto.ConsultaCnpjDTO;
 import mentoria.lojavirtual.repository.EnderecoRepository;
 import mentoria.lojavirtual.repository.PessoaFisicaRepository;
 import mentoria.lojavirtual.repository.PessoaRepository;
@@ -86,6 +88,12 @@ public class PessoaController {
 	}
 	
 	@ResponseBody
+	@GetMapping(value = "**/consultaCnpjReceitaWS/{cnpj}")
+	public ResponseEntity<ConsultaCnpjDTO> consultarCnpj(@PathVariable("cnpj") String cnpj){
+		return new ResponseEntity<ConsultaCnpjDTO>(pessoaUserService.conslutaCnpjReceitaWS(cnpj),HttpStatus.OK);
+	}
+	
+	@ResponseBody
 	@PostMapping(value = "**/salvarPj")
 	public ResponseEntity<PessoaJuridica> salvarPj(@RequestBody @Valid PessoaJuridica pessoaJuridica) throws ExceptionMentoriaJava{
 		
@@ -95,6 +103,10 @@ public class PessoaController {
 		
 		if(pessoaJuridica == null) {
 			throw new ExceptionMentoriaJava("Não podemos cadastrar Pessoa Júridica como NULL");
+		}
+		
+		if(pessoaJuridica.getTipoPessoa() == null) {
+			throw new ExceptionMentoriaJava("Informe o tipo: Júridica ou Jurídica e Fornecedor");
 		}
 		
 		if(pessoaJuridica.getId() == null && pessoaRepository.existeCnpjCadastrado(pessoaJuridica.getCnpj()) != null ) {
@@ -151,6 +163,10 @@ public class PessoaController {
 		
 		if(pessoaFisica == null) {
 			throw new ExceptionMentoriaJava("Não podemos cadastrar Pessoa Física como NULL");
+		}
+		
+		if(pessoaFisica.getTipoPessoa() == null) {
+			pessoaFisica.setTipoPessoa(TipoPessoa.FISICA.name());
 		}
 		
 		if(pessoaFisica.getId() == null && pessoaFisicaRepository.existeCpfCadastrado(pessoaFisica.getCpf()) != null ) {
