@@ -31,14 +31,27 @@ public class ProdutoContrloller {
 	@PostMapping(value = "**/salvarProduto") /*Mapeando a url para receber JSON*/
 	public ResponseEntity<Produto> salvarProduto(@RequestBody @Valid Produto produto) throws ExceptionMentoriaJava { /*Recebe o JSON e converte para Objeto Java*/
 		
+		if(produto.getEmpresa().getId() == null || produto.getEmpresa().getId() <= 0) {
+			throw new ExceptionMentoriaJava("A empresa deve ser informada ");
+		}
+		
 		if(produto.getId() == null ||produtoRepository.existeProduto(produto.getNome())) {
 			
-			List <Produto> produtos = produtoRepository.buscarProdutoNome(produto.getNome());
+			List <Produto> produtos = produtoRepository.buscarProdutoNome(produto.getNome().toUpperCase(), 
+									  produto.getEmpresa().getId());
 			
 			if(!produtos.isEmpty()) {
 				
 				throw new ExceptionMentoriaJava("Já existe produto com esse nome: "+produto.getNome());
 			}
+		}
+		
+		if(produto.getCategoriaProduto().getId() == null || produto.getCategoriaProduto().getId() <= 0) {
+			throw new ExceptionMentoriaJava("A Categoria do produto é um campo obrigatório ");
+		}
+		
+		if(produto.getMarcaProduto().getId() == null || produto.getMarcaProduto().getId() <= 0) {
+			throw new ExceptionMentoriaJava("A Marca do produto é um campo obrigatório ");
 		}
 		
 		Produto produtoSalvo = produtoRepository.save(produto);

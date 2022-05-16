@@ -18,4 +18,7 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long>{
 
 	@Query("select p from Produto p where upper(p.nome) like %?1% ")
 	public List<Produto> buscarProdutoNome(String nome);
+	
+	@Query("select p from Produto p where upper(p.nome) like %?1% and p.empresa.id = ?2")
+	public List<Produto> buscarProdutoNome(String nome, Long idEmpresa);
 }
