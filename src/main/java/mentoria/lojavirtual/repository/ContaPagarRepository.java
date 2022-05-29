@@ -16,6 +16,9 @@ public interface ContaPagarRepository extends JpaRepository<ContaPagar, Long> {
 	@Query("select c from ContaPagar c where upper(trim(c.descricao)) like %?1%")
 	List<ContaPagar> buscaContaDesc(String desc);
 	
+	@Query(nativeQuery = true, value = "select count(1) > 0 from conta_pagar where upper(trim(descricao)) like %?1%")
+	boolean existeContaPagarComDescricao(String desc);
+	
 	@Query("select c from ContaPagar c where upper(trim(c.descricao)) like %?1% and c.empresa.id = ?2")
 	List<ContaPagar> buscaContaDesc(String desc, Long IdEmpresa);
 	

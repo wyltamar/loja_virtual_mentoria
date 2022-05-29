@@ -45,9 +45,9 @@ public class ContaPagarContrloller {
 		
 		if(contaPagar.getId() == null || contaPagar.getId() <= 0) {
 			
-			List<ContaPagar> contasPagar = contaPagarRepository.buscaContaDesc(contaPagar.getDescricao().toUpperCase().trim());
+			boolean existeContaPagar = contaPagarRepository.existeContaPagarComDescricao(contaPagar.getDescricao().toUpperCase().trim());
 		
-			if(!contasPagar.isEmpty()) {
+			if(existeContaPagar) {
 				throw new ExceptionMentoriaJava("Já existe conta pagar com essa descrição");
 			}
 		}
