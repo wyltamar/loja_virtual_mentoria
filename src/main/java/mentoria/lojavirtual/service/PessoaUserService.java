@@ -5,6 +5,7 @@ import java.util.Calendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,6 +19,7 @@ import mentoria.lojavirtual.repository.PessoaRepository;
 import mentoria.lojavirtual.repository.UsuarioRepository;
 
 @Service
+@Component
 public class PessoaUserService {
 
 	@Autowired
@@ -95,7 +97,7 @@ public class PessoaUserService {
 		
 		for(int i = 0; i < pessoaFisica.getEnderecos().size(); i++) {
 			
-			//pessoaFisica.getEnderecos().get(i).setEmpresa(pessoaFisica);
+			pessoaFisica.getEnderecos().get(i).setEmpresa(pessoaFisica);
 			pessoaFisica.getEnderecos().get(i).setPessoa(pessoaFisica);
 		}
 		
