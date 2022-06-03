@@ -58,10 +58,10 @@ public class ContaPagar implements Serializable {
 	private Date dtPagamento;
 
 
-	@ManyToOne(targetEntity = PessoaFisica.class)
+	@ManyToOne(targetEntity = PessoaJuridica.class)
 	@JoinColumn(name = "pessoa_id", nullable = false, 
 	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk"))
-	private PessoaFisica pessoa;
+	private PessoaJuridica pessoa;
 	
 	@ManyToOne(targetEntity = PessoaJuridica.class)
 	@JoinColumn(name = "pessoa_forn_id", nullable = false, 
@@ -145,11 +145,11 @@ public class ContaPagar implements Serializable {
 		this.valorDesconto = valorDesconto;
 	}
 
-	public PessoaFisica getPessoa() {
+	public PessoaJuridica getPessoa() {
 		return pessoa;
 	}
 
-	public void setPessoa(PessoaFisica pessoa) {
+	public void setPessoa(PessoaJuridica pessoa) {
 		this.pessoa = pessoa;
 	}
 
