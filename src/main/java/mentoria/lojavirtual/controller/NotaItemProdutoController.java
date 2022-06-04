@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import mentoria.lojavirtual.ExceptionMentoriaJava;
+import mentoria.lojavirtual.model.NotaFiscalCompra;
 import mentoria.lojavirtual.model.NotaItemProduto;
 import mentoria.lojavirtual.model.Produto;
+import mentoria.lojavirtual.repository.NotaFiscalCompraRepository;
 import mentoria.lojavirtual.repository.NotaItemProdutoRepository;
 import mentoria.lojavirtual.repository.ProdutoRepository;
 
@@ -29,6 +31,9 @@ public class NotaItemProdutoController {
 	
 	@Autowired
 	private ProdutoRepository produtoRepository;
+	
+	@Autowired
+	private NotaFiscalCompraRepository notaFiscalCompraRepository;
 	
 	@ResponseBody
 	@PostMapping(value = "**/salvarNotaItemProduto")
@@ -91,6 +96,30 @@ public class NotaItemProdutoController {
 		if(notasItemExistentes.isEmpty()) throw new ExceptionMentoriaJava("Não existe nota item produto associado a este produto!");
 		
 		return new ResponseEntity <List<NotaItemProduto>>(notasItemExistentes, HttpStatus.OK);
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "**/buscarNotaItemPorNota/{id}")
+	public ResponseEntity<List<NotaItemProduto>> buscarNotaItemPorNota(@PathVariable("id") Long id)throws ExceptionMentoriaJava{
+		
+		NotaFiscalCompra notaFiscal = notaFiscalCompraRepository.findById(id).orElse(null);
+		
+		if(notaFiscal == null ) {
+			
+			throw new ExceptionMentoriaJava("Nota Fiscal inexistente!");	
+		}
+		else {
+			
+			List<NotaItemProduto> notasFiscais = notaItemProdutoRepository.buscaNotaItemPorNotaFiscal(id);
+			
+			if(notasFiscais.isEmpty()) {
+				throw new ExceptionMentoriaJava("Nota Item não está associada a esta nota fiscal de compra");
+			}else {
+			
+			return new ResponseEntity <List<NotaItemProduto>> (notasFiscais, HttpStatus.OK);
+			}
+		}
+	
 	}
 
 }
