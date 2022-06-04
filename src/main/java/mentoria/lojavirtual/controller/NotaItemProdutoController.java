@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,13 +17,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import mentoria.lojavirtual.ExceptionMentoriaJava;
 import mentoria.lojavirtual.model.NotaItemProduto;
+import mentoria.lojavirtual.model.Produto;
 import mentoria.lojavirtual.repository.NotaItemProdutoRepository;
+import mentoria.lojavirtual.repository.ProdutoRepository;
 
 @RestController
 public class NotaItemProdutoController {
 	
 	@Autowired
 	private  NotaItemProdutoRepository notaItemProdutoRepository;
+	
+	@Autowired
+	private ProdutoRepository produtoRepository;
 	
 	@ResponseBody
 	@PostMapping(value = "**/salvarNotaItemProduto")
@@ -68,6 +74,23 @@ public class NotaItemProdutoController {
 		notaItemProdutoRepository.deleteById(id);
 		
 		return new ResponseEntity<>("Nota item produto removido com sucesso!", HttpStatus.OK);
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "**/buscarNotaItemPorProduto/{idProduto}")
+	public ResponseEntity <List<NotaItemProduto>> buscarNotaItemPorProduto(@PathVariable ("idProduto") Long idProduto) throws ExceptionMentoriaJava{
+		
+		Produto produto = produtoRepository.findById(idProduto).orElse(null);
+		
+		if(produto == null ) {
+			throw new ExceptionMentoriaJava("Informe um id de Produto válido!");
+		}
+		
+		List<NotaItemProduto> notasItemExistentes = notaItemProdutoRepository.buscaNotaItemPorProduto(idProduto);
+		
+		if(notasItemExistentes.isEmpty()) throw new ExceptionMentoriaJava("Não existe nota item produto associado a este produto!");
+		
+		return new ResponseEntity <List<NotaItemProduto>>(notasItemExistentes, HttpStatus.OK);
 	}
 
 }
