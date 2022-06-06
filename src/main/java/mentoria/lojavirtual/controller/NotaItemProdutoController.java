@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 import mentoria.lojavirtual.ExceptionMentoriaJava;
 import mentoria.lojavirtual.model.NotaFiscalCompra;
 import mentoria.lojavirtual.model.NotaItemProduto;
+import mentoria.lojavirtual.model.PessoaJuridica;
 import mentoria.lojavirtual.model.Produto;
 import mentoria.lojavirtual.repository.NotaFiscalCompraRepository;
 import mentoria.lojavirtual.repository.NotaItemProdutoRepository;
+import mentoria.lojavirtual.repository.PessoaRepository;
 import mentoria.lojavirtual.repository.ProdutoRepository;
 
 @RestController
@@ -34,6 +36,9 @@ public class NotaItemProdutoController {
 	
 	@Autowired
 	private NotaFiscalCompraRepository notaFiscalCompraRepository;
+	
+	@Autowired
+	private PessoaRepository pessoaRepository;
 	
 	@ResponseBody
 	@PostMapping(value = "**/salvarNotaItemProduto")
@@ -117,6 +122,31 @@ public class NotaItemProdutoController {
 			}else {
 			
 			return new ResponseEntity <List<NotaItemProduto>> (notasFiscais, HttpStatus.OK);
+			}
+		}
+	
+	}
+	
+	
+	@ResponseBody
+	@GetMapping(value = "**/buscarNotaItemPorEmpresa/{idEmpresa}")
+	public ResponseEntity<List<NotaItemProduto>> buscarNotaItemPorEmpresa(@PathVariable("idEmpresa") Long idEmpresa)throws ExceptionMentoriaJava{
+		
+		PessoaJuridica empresa = pessoaRepository.findById(idEmpresa).orElse(null);
+		
+		if(empresa == null ) {
+			
+			throw new ExceptionMentoriaJava("Essa empresa não existe em nossa base de dados");	
+		}
+		else {
+			
+			List<NotaItemProduto> notasFiscais = notaItemProdutoRepository.buscaNotaItemPorEmpresa(idEmpresa);
+			
+			if(notasFiscais.isEmpty()) {
+				throw new ExceptionMentoriaJava("Esta empresa não está associada a nenhuma Nota Item Produto");
+			}else {
+			
+				return new ResponseEntity <List<NotaItemProduto>> (notasFiscais, HttpStatus.OK);
 			}
 		}
 	
