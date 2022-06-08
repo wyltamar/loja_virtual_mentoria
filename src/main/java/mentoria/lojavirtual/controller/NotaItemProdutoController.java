@@ -87,6 +87,15 @@ public class NotaItemProdutoController {
 	}
 	
 	@ResponseBody
+	@PostMapping(value = "**/deleteNotaItemProduto")
+	public ResponseEntity<?> deleteNotaItemProduto(@RequestBody NotaItemProduto notaItemProduto){
+		
+		notaItemProdutoRepository.delete(notaItemProduto);
+		
+		return new ResponseEntity<>("Nota Item Produto removido com sucesso",HttpStatus.OK);
+	}
+	
+	@ResponseBody
 	@GetMapping(value = "**/buscarNotaItemPorProduto/{idProduto}")
 	public ResponseEntity <List<NotaItemProduto>> buscarNotaItemPorProduto(@PathVariable ("idProduto") Long idProduto) throws ExceptionMentoriaJava{
 		
