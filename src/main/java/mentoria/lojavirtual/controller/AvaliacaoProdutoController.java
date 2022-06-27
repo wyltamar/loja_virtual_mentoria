@@ -1,5 +1,6 @@
 package mentoria.lojavirtual.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import mentoria.lojavirtual.ExceptionMentoriaJava;
 import mentoria.lojavirtual.model.AvaliacaoProduto;
+import mentoria.lojavirtual.model.dto.AvaliacaoProdutoDTO;
 import mentoria.lojavirtual.repository.AvaliacaoProdutoRepository;
 
 @RestController
@@ -26,8 +28,8 @@ public class AvaliacaoProdutoController {
 	private AvaliacaoProdutoRepository avaliacaoProdutoRepository;
 	
 	@ResponseBody
-	@PostMapping(value = "**/salvarAvalicaoProduto")
-	public ResponseEntity<AvaliacaoProduto> salvarAvalicaoProduto(@RequestBody @Valid AvaliacaoProduto avaliacaoProduto)throws ExceptionMentoriaJava{
+	@PostMapping(value = "**/salvarAvaliacaoProduto")
+	public ResponseEntity<AvaliacaoProdutoDTO> salvarAvalicaoProduto(@RequestBody @Valid AvaliacaoProduto avaliacaoProduto)throws ExceptionMentoriaJava{
 		
 		if(avaliacaoProduto.getPessoa() == null || (avaliacaoProduto.getPessoa() != null && avaliacaoProduto.
 													getPessoa().getId() <= 0)) {
@@ -44,7 +46,15 @@ public class AvaliacaoProdutoController {
 		
 		avaliacaoProduto = avaliacaoProdutoRepository.saveAndFlush(avaliacaoProduto);
 		
-		return new ResponseEntity<AvaliacaoProduto>(avaliacaoProduto, HttpStatus.OK);
+		AvaliacaoProdutoDTO avaliacaoProdutoDTO = new AvaliacaoProdutoDTO();
+		avaliacaoProdutoDTO.setDescricao(avaliacaoProduto.getDescricao());
+		avaliacaoProdutoDTO.setEmpresa(avaliacaoProduto.getEmpresa().getId());
+		avaliacaoProdutoDTO.setId(avaliacaoProduto.getId());
+		avaliacaoProdutoDTO.setNota(avaliacaoProduto.getNota());
+		avaliacaoProdutoDTO.setPessoa(avaliacaoProduto.getPessoa().getId());
+		avaliacaoProdutoDTO.setProduto(avaliacaoProduto.getProduto().getId());
+		
+		return new ResponseEntity<AvaliacaoProdutoDTO>(avaliacaoProdutoDTO, HttpStatus.OK);
 		
 	}
 	
@@ -60,7 +70,9 @@ public class AvaliacaoProdutoController {
 	
 	@ResponseBody
 	@GetMapping(value = "**/buscarAvaliacaoPorProduto/{idProduto}")
-	public ResponseEntity<List<AvaliacaoProduto>> buscarAvaliacaoPorProduto(@PathVariable("idProduto") Long idProduto)throws ExceptionMentoriaJava{
+	public ResponseEntity<List<AvaliacaoProdutoDTO>> buscarAvaliacaoPorProduto(@PathVariable("idProduto") Long idProduto)throws ExceptionMentoriaJava{
+		
+		List<AvaliacaoProdutoDTO> dtos = new ArrayList<AvaliacaoProdutoDTO>();
 		
 		List<AvaliacaoProduto> avaliacoesProduto = avaliacaoProdutoRepository.buscarAvaliacaoPorProduto(idProduto);
 		
@@ -68,13 +80,28 @@ public class AvaliacaoProdutoController {
 			throw new ExceptionMentoriaJava("Não existe avaliação para o produto como id = "+idProduto);
 		}
 		
-		return new ResponseEntity<List<AvaliacaoProduto>>(avaliacoesProduto, HttpStatus.OK);
+		for (AvaliacaoProduto avaliacaoProduto : avaliacoesProduto) {
+			
+			AvaliacaoProdutoDTO avaliacaoProdutoDTO = new AvaliacaoProdutoDTO();
+			avaliacaoProdutoDTO.setDescricao(avaliacaoProduto.getDescricao());
+			avaliacaoProdutoDTO.setEmpresa(avaliacaoProduto.getEmpresa().getId());
+			avaliacaoProdutoDTO.setId(avaliacaoProduto.getId());
+			avaliacaoProdutoDTO.setNota(avaliacaoProduto.getNota());
+			avaliacaoProdutoDTO.setPessoa(avaliacaoProduto.getPessoa().getId());
+			avaliacaoProdutoDTO.setProduto(avaliacaoProduto.getProduto().getId());
+			
+			dtos.add(avaliacaoProdutoDTO);
+		}
+		
+		return new ResponseEntity<List<AvaliacaoProdutoDTO>>(dtos, HttpStatus.OK);
 		
 	}
 	
 	@ResponseBody
 	@GetMapping(value = "**/buscarAvaliacaoProdutoPorPessoa/{idPessoa}")
-	public ResponseEntity<List<AvaliacaoProduto>> buscarAvaliacaoProdutoPorPessoa(@PathVariable("idPessoa") Long idPessoa) throws ExceptionMentoriaJava{
+	public ResponseEntity<List<AvaliacaoProdutoDTO>> buscarAvaliacaoProdutoPorPessoa(@PathVariable("idPessoa") Long idPessoa) throws ExceptionMentoriaJava{
+		
+		List<AvaliacaoProdutoDTO> dtos = new ArrayList<AvaliacaoProdutoDTO>();
 		
 		List<AvaliacaoProduto> avaliacoesPessoas = avaliacaoProdutoRepository.buscarAvaliacaoProdutoPorPessoa(idPessoa);
 		
@@ -82,13 +109,27 @@ public class AvaliacaoProdutoController {
 			throw new ExceptionMentoriaJava("Não existe avaliação para o produto como id = "+idPessoa);
 		}
 		
-		return new ResponseEntity<List<AvaliacaoProduto>>(avaliacoesPessoas, HttpStatus.OK);
+		for (AvaliacaoProduto avaliacaoProduto : avaliacoesPessoas) {
+			
+			AvaliacaoProdutoDTO avaliacaoProdutoDTO = new AvaliacaoProdutoDTO();
+			avaliacaoProdutoDTO.setDescricao(avaliacaoProduto.getDescricao());
+			avaliacaoProdutoDTO.setEmpresa(avaliacaoProduto.getEmpresa().getId());
+			avaliacaoProdutoDTO.setId(avaliacaoProduto.getId());
+			avaliacaoProdutoDTO.setNota(avaliacaoProduto.getNota());
+			avaliacaoProdutoDTO.setPessoa(avaliacaoProduto.getPessoa().getId());
+			avaliacaoProdutoDTO.setProduto(avaliacaoProduto.getProduto().getId());
+			
+			dtos.add(avaliacaoProdutoDTO);
+		}
+		
+		return new ResponseEntity<List<AvaliacaoProdutoDTO>>(dtos, HttpStatus.OK);
 	}
 	
 	@ResponseBody
 	@GetMapping(value = "**/buscarAvaliacaoPorProdutoEPessoa/{idProduto}/{idPessoa}")
-	public ResponseEntity<List<AvaliacaoProduto>> buscarAvaliacaoPorProdutoEPessoa(@PathVariable("idProduto") Long idProduto,
+	public ResponseEntity<List<AvaliacaoProdutoDTO>> buscarAvaliacaoPorProdutoEPessoa(@PathVariable("idProduto") Long idProduto,
 																				@PathVariable("idPessoa") Long idPessoa)throws ExceptionMentoriaJava{
+		List<AvaliacaoProdutoDTO> dtos = new ArrayList<AvaliacaoProdutoDTO>();
 		
 		List<AvaliacaoProduto> avaliacoesProdutoPessoa = avaliacaoProdutoRepository.buscarAvaliacaoPorProdutoEPessoa(idProduto, idPessoa);
 		
@@ -96,7 +137,20 @@ public class AvaliacaoProdutoController {
 			throw new ExceptionMentoriaJava("Não existe avaliação para a pessoa ou produto informados.");
 		}
 		
-		return new ResponseEntity<List<AvaliacaoProduto>>(avaliacoesProdutoPessoa, HttpStatus.OK);
+		for (AvaliacaoProduto avaliacaoProduto : avaliacoesProdutoPessoa) {
+			
+			AvaliacaoProdutoDTO avaliacaoProdutoDTO = new AvaliacaoProdutoDTO();
+			avaliacaoProdutoDTO.setDescricao(avaliacaoProduto.getDescricao());
+			avaliacaoProdutoDTO.setEmpresa(avaliacaoProduto.getEmpresa().getId());
+			avaliacaoProdutoDTO.setId(avaliacaoProduto.getId());
+			avaliacaoProdutoDTO.setNota(avaliacaoProduto.getNota());
+			avaliacaoProdutoDTO.setPessoa(avaliacaoProduto.getPessoa().getId());
+			avaliacaoProdutoDTO.setProduto(avaliacaoProduto.getProduto().getId());
+			
+			dtos.add(avaliacaoProdutoDTO);
+		}
+		
+		return new ResponseEntity<List<AvaliacaoProdutoDTO>>(dtos, HttpStatus.OK);
 	}
 
 }
