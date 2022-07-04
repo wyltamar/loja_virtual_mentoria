@@ -97,8 +97,8 @@ public class Vd_Cp_Loja_VirtController {
 	}
 
 	@ResponseBody
-	@GetMapping(value = "**/buscarVendaId/{id}")
-	public ResponseEntity<VendaCompraLojaVirtualDTO> buscarVendaId(@PathVariable("id") Long idVenda) {
+	@GetMapping(value = "**/consultaVendaId/{id}")
+	public ResponseEntity<VendaCompraLojaVirtualDTO> consultaVendaId(@PathVariable("id") Long idVenda) {
 
 		VendaCompraLojaVirtual vendaCompraLojaVirtual = vd_Cp_Loja_VirtRepository.findById(idVenda)
 				.orElse(new VendaCompraLojaVirtual());
