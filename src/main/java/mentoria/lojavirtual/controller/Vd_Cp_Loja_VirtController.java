@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,12 +17,15 @@ import mentoria.lojavirtual.ExceptionMentoriaJava;
 import mentoria.lojavirtual.model.Endereco;
 import mentoria.lojavirtual.model.ItemVendaLoja;
 import mentoria.lojavirtual.model.PessoaFisica;
+import mentoria.lojavirtual.model.StatusRastreio;
 import mentoria.lojavirtual.model.VendaCompraLojaVirtual;
 import mentoria.lojavirtual.model.dto.ItemVendaDTO;
 import mentoria.lojavirtual.model.dto.VendaCompraLojaVirtualDTO;
 import mentoria.lojavirtual.repository.EnderecoRepository;
 import mentoria.lojavirtual.repository.NotaFiscalVendaRepository;
+import mentoria.lojavirtual.repository.StatusRastreioRepository;
 import mentoria.lojavirtual.repository.Vd_Cp_Loja_VirtRepository;
+import mentoria.lojavirtual.service.VendaService;
 
 @RestController
 public class Vd_Cp_Loja_VirtController {
@@ -37,12 +41,19 @@ public class Vd_Cp_Loja_VirtController {
 
 	@Autowired
 	private NotaFiscalVendaRepository notaFiscalVendaRepository;
+	
+	@Autowired
+	private StatusRastreioRepository statusRastreioRepository;
+	
+	@Autowired
+	private VendaService vendaService;
 
 	@ResponseBody
 	@PostMapping(value = "**/salvarVendaLoja")
 	public ResponseEntity<VendaCompraLojaVirtualDTO> salvarVendaLoja(
 			@RequestBody @Valid VendaCompraLojaVirtual vendaCompraLojaVirtual) throws ExceptionMentoriaJava {
 
+		vendaCompraLojaVirtual.getPessoa().setEmpresa(vendaCompraLojaVirtual.getEmpresa());
 		PessoaFisica pessoaFisica = pessoaController.salvarPf(vendaCompraLojaVirtual.getPessoa()).getBody();
 		vendaCompraLojaVirtual.setPessoa(pessoaFisica);
 
@@ -67,7 +78,17 @@ public class Vd_Cp_Loja_VirtController {
 		}
 
 		/* Salva primeiro a venda e todos os dados */
-		vendaCompraLojaVirtual = vd_Cp_Loja_VirtRepository.saveAndFlush(vendaCompraLojaVirtual);
+		 vendaCompraLojaVirtual = vd_Cp_Loja_VirtRepository.saveAndFlush(vendaCompraLojaVirtual);
+		
+		StatusRastreio statusRastreio = new StatusRastreio();
+		statusRastreio.setCentroDistribuicao("Local");
+		statusRastreio.setCidade("Jerico");
+		statusRastreio.setEmpresa(vendaCompraLojaVirtual.getEmpresa());
+		statusRastreio.setEstado("PB");
+		statusRastreio.setStatus("Pedido realizado");
+		statusRastreio.setVendaCompraLojaVirtual(vendaCompraLojaVirtual);
+		
+		statusRastreioRepository.save(statusRastreio);
 
 		/* Associa a venda gravada no banco com a nota fiscal */
 		vendaCompraLojaVirtual.getNotaFiscalVenda().setVendaCompraLojaVirtual(vendaCompraLojaVirtual);
@@ -123,6 +144,15 @@ public class Vd_Cp_Loja_VirtController {
 		}
 
 		return new ResponseEntity<VendaCompraLojaVirtualDTO>(compraLojaVirtualDTO, HttpStatus.OK);
+	}
+	
+	@ResponseBody
+	@DeleteMapping(value = "**/exclusaoTotalVenda/{idVenda}")
+	public ResponseEntity<String> exclusaoTotalVenda(@PathVariable("idVenda") Long idVenda){
+		
+		vendaService.exclusaoTotalVenda(idVenda);
+		
+		return new ResponseEntity<String>("Venda removida com sucesso.",HttpStatus.OK);
 	}
 
 }
