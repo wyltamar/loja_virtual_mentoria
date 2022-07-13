@@ -10,6 +10,11 @@ public class VendaService {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
+	public void exclusaoLogicaVenda(Long id) {
+		String sql = "begin; update vd_cp_loja_virt set excluido = true where id = "+id+";commit;";
+		jdbcTemplate.execute(sql);
+	}
+	
 	public void exclusaoTotalVenda(Long idVenda) {
 		
 		String sql = 
@@ -20,6 +25,12 @@ public class VendaService {
 				+ "delete from item_venda_loja where venda_compra_loja_virtual_id = "+idVenda+";"
 				+ "delete from vd_cp_loja_virt where id = "+idVenda+";"
 				+ "commit;";
+		jdbcTemplate.execute(sql);
+	}
+	
+	public void ativaVenda(Long idVenda) {
+		
+		String sql = "begin; update vd_cp_loja_virt set excluido = false where id = "+idVenda+"; commit; ";
 		jdbcTemplate.execute(sql);
 	}
 	
