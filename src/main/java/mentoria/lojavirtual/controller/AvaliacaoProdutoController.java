@@ -60,12 +60,27 @@ public class AvaliacaoProdutoController {
 	
 	@ResponseBody
 	@DeleteMapping(value = "**/deleteAvaliacaoPessoa/{idAvaliacao}")
-	public ResponseEntity<?> deleteAvaliacaoPessoa(@PathVariable("idAvaliacao") Long idAvaliacao){
+	public ResponseEntity<?> deleteAvaliacaoPessoa(@PathVariable("idAvaliacao") Long idAvaliacao) throws ExceptionMentoriaJava{
 		
-		avaliacaoProdutoRepository.deleteById(idAvaliacao);
+		List<AvaliacaoProduto> avaliacoesProdutos = avaliacaoProdutoRepository.findAll();
+		
+		if(!avaliacoesProdutos.isEmpty()) {
+			
+			for (AvaliacaoProduto avaliacaoProduto : avaliacoesProdutos) {
+				
+				if(avaliacaoProduto.getId() == idAvaliacao ) {
+					avaliacaoProdutoRepository.deleteById(idAvaliacao);
+				}else {
+					throw new ExceptionMentoriaJava("Não existe avaliação com o id = "+idAvaliacao);
+				}
+			}
+		}
+		else {
+			throw new ExceptionMentoriaJava("Não existe avaliações em nossa base de dados");
+		}
 		
 		return new ResponseEntity<String>("Avaliação removida com sucesso.",HttpStatus.OK);
-		
+				
 	}
 	
 	@ResponseBody
