@@ -1,7 +1,9 @@
 package mentoria.lojavirtual.controller;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -228,8 +230,13 @@ public class Vd_Cp_Loja_VirtController {
 		
 		List<VendaCompraLojaVirtual> vendaCompraLojaVirtual = null;
 		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date dt1 = dateFormat.parse(data1);
+		Date dt2 = dateFormat.parse(data2);
 		
-		vendaCompraLojaVirtual = vendaService.consultaVendaFaixaData(data1,data2);
+		vendaCompraLojaVirtual = vd_Cp_Loja_VirtRepository.consultaVendaFaixaData(dt1,dt2);
+		
+		
 		
 		if(vendaCompraLojaVirtual == null) {
 			

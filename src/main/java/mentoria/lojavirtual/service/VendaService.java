@@ -47,12 +47,12 @@ public class VendaService {
 	@SuppressWarnings("unchecked")
 	public List<VendaCompraLojaVirtual> consultaVendaFaixaData(String data1,String data2){
 		
-		String sql = "select distinct(i.vendaCompraLojaVirtual) from ItemVendaLoja i"
-						+ "where i.vendaCompraLojaVirtual.excluido = false"
-						+ "and i.vendaCompraLojaVirtual.dataVenda >= '"+ data1 +"'"
-						+ "and i.vendaCompraLojaVirtual.dataVenda <= '"+ data2 +"'";
+		String sql = "select i.vendaCompraLojaVirtual from ItemVendaLoja i "
+				+ " where i.vendaCompraLojaVirtual.excluido = false "
+				+ " and i.vendaCompraLojaVirtual.dataVenda >= '" +data1 + "'"
+				+ " and i.vendaCompraLojaVirtual.dataVenda <= '" + data2 + "'";
 		
-		return entityManger.createNamedQuery(sql).getResultList();
+		return entityManger.createQuery(sql).getResultList();
 	}
 	
 

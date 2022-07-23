@@ -1,4 +1,5 @@
 package mentoria.lojavirtual.repository;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,11 +31,11 @@ public interface Vd_Cp_Loja_VirtRepository extends JpaRepository<VendaCompraLoja
 	@Query(value = "select distinct(i.vendaCompraLojaVirtual) from ItemVendaLoja i where i.vendaCompraLojaVirtual.excluido = false and upper(trim(i.vendaCompraLojaVirtual.enderecoEntrega.logradouro)) like %?1%")
 	public List<VendaCompraLojaVirtual> vendaPorEnderecoEntrega(String enderecoEntrega);
 
-	@Query(value = "select distinct (i.vendaCompraLojaVirtual) from ItemVendaLoja i"
+	@Query(value = "select distinct(i.vendaCompraLojaVirtual) from ItemVendaLoja i"
 			+ " where i.vendaCompraLojaVirtual.excluido = false"
 			+ " and i.vendaCompraLojaVirtual.dataVenda >= ?1"
 			+ " and i.vendaCompraLojaVirtual.dataVenda <= ?2")
-	public List<VendaCompraLojaVirtual> consultaVendaFaixaData(String data1,String data2);
+	public List<VendaCompraLojaVirtual> consultaVendaFaixaData(Date data1,Date data2);
 	
 
 }
