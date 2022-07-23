@@ -1,5 +1,6 @@
 package mentoria.lojavirtual.controller;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -220,6 +221,51 @@ public class Vd_Cp_Loja_VirtController {
 		return new ResponseEntity<List<VendaCompraLojaVirtualDTO>>(compraLojaVirtualDTOList, HttpStatus.OK);
 	}
 	
+	@ResponseBody
+	@GetMapping(value = "**/consultaVendaDinamicaFaixaData/{data1}/{data2}")
+	public ResponseEntity<List<VendaCompraLojaVirtualDTO>> consultaVendaDinamicaFaixaData(
+					@PathVariable("data1") String data1, @PathVariable("data2") String data2) throws ParseException{
+		
+		List<VendaCompraLojaVirtual> vendaCompraLojaVirtual = null;
+		
+		
+		vendaCompraLojaVirtual = vendaService.consultaVendaFaixaData(data1,data2);
+		
+		if(vendaCompraLojaVirtual == null) {
+			
+			vendaCompraLojaVirtual = new ArrayList<VendaCompraLojaVirtual>();
+		}
+		
+		List<VendaCompraLojaVirtualDTO> compraLojaVirtualDTOList = new ArrayList<VendaCompraLojaVirtualDTO>();
+		
+		for (VendaCompraLojaVirtual vcl : vendaCompraLojaVirtual) {
+			
+			VendaCompraLojaVirtualDTO compraLojaVirtualDTO = new VendaCompraLojaVirtualDTO();
+			
+			compraLojaVirtualDTO.setValorTotal(vcl.getValorTotal());
+			compraLojaVirtualDTO.setPessoa(vcl.getPessoa());
+			compraLojaVirtualDTO.setCobranca(vcl.getEnderecoCobranca());
+			compraLojaVirtualDTO.setEntrega(vcl.getEnderecoEntrega());
+			compraLojaVirtualDTO.setValorDesconto(vcl.getValorDesconto());
+			compraLojaVirtualDTO.setValorFrete(vcl.getValorFrete());
+			compraLojaVirtualDTO.setId(vcl.getId());
+			
+			for (ItemVendaLoja item : vcl.getItemVendas()) {
+				
+				ItemVendaDTO itemVendaDTO = new ItemVendaDTO();
+				itemVendaDTO.setProduto(item.getProduto());
+				itemVendaDTO.setQuantidade(item.getQuantidade());
+				
+				compraLojaVirtualDTO.getItemVendas().add(itemVendaDTO);
+			}
+			
+			compraLojaVirtualDTOList.add(compraLojaVirtualDTO);
+		}
+		
+
+		return new ResponseEntity<List<VendaCompraLojaVirtualDTO>>(compraLojaVirtualDTOList, HttpStatus.OK);
+		
+	}
 	
 	@ResponseBody
 	@GetMapping(value = "**/consultaVendaDinamica/{valor}/{tipoConsulta}")
