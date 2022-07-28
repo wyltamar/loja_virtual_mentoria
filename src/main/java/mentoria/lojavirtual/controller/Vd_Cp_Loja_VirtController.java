@@ -1,9 +1,7 @@
 package mentoria.lojavirtual.controller;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -230,13 +228,7 @@ public class Vd_Cp_Loja_VirtController {
 		
 		List<VendaCompraLojaVirtual> vendaCompraLojaVirtual = null;
 		
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		Date dt1 = dateFormat.parse(data1);
-		Date dt2 = dateFormat.parse(data2);
-		
-		vendaCompraLojaVirtual = vd_Cp_Loja_VirtRepository.consultaVendaFaixaData(dt1,dt2);
-		
-		
+		vendaCompraLojaVirtual = vendaService.consultaVendaFaixaData(data1,data2);
 		
 		if(vendaCompraLojaVirtual == null) {
 			
@@ -286,6 +278,12 @@ public class Vd_Cp_Loja_VirtController {
 		}
 		else if(tipoConsulta.equalsIgnoreCase("POR_NOME_PROD")) {
 			vendaCompraLojaVirtual = vd_Cp_Loja_VirtRepository.vendaPorNomeProduto(valor.toUpperCase().trim());
+		}
+		else if(tipoConsulta.equalsIgnoreCase("POR_CPF_CLIENTE_LIKE")) {
+			vendaCompraLojaVirtual = vd_Cp_Loja_VirtRepository.vendaPorCpfClienteLike(valor);
+		}
+		else if(tipoConsulta.equalsIgnoreCase("POR_CPF_CLIENTE_IGUAL")) {
+			vendaCompraLojaVirtual = vd_Cp_Loja_VirtRepository.vendaPorCpfClienteIgual(valor);
 		}
 		else if(tipoConsulta.equalsIgnoreCase("POR_NOME_CLIENTE")) {
 			vendaCompraLojaVirtual = vd_Cp_Loja_VirtRepository.vendaPorNomeCliente(valor.toUpperCase().trim());

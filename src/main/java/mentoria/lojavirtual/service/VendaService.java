@@ -1,21 +1,24 @@
 package mentoria.lojavirtual.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import mentoria.lojavirtual.model.VendaCompraLojaVirtual;
+import mentoria.lojavirtual.repository.Vd_Cp_Loja_VirtRepository;
 
 @Service
 public class VendaService {
 	
 	@Autowired
-	private EntityManager entityManger;
-	
+	private Vd_Cp_Loja_VirtRepository vd_Cp_Loja_VirtRepository;
+		
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
@@ -44,15 +47,13 @@ public class VendaService {
 	}
 	
 	/*HQL (Hibernate) ou JPQL (JPA ou Spring Data)*/
-	@SuppressWarnings("unchecked")
-	public List<VendaCompraLojaVirtual> consultaVendaFaixaData(String data1,String data2){
+	public List<VendaCompraLojaVirtual> consultaVendaFaixaData(String data1,String data2)throws ParseException{
 		
-		String sql = "select i.vendaCompraLojaVirtual from ItemVendaLoja i "
-				+ " where i.vendaCompraLojaVirtual.excluido = false "
-				+ " and i.vendaCompraLojaVirtual.dataVenda >= '" +data1 + "'"
-				+ " and i.vendaCompraLojaVirtual.dataVenda <= '" + data2 + "'";
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date dt1 = dateFormat.parse(data1);
+		Date dt2 = dateFormat.parse(data2);
 		
-		return entityManger.createQuery(sql).getResultList();
+		return vd_Cp_Loja_VirtRepository.consultaVendaFaixaData(dt1, dt2);
 	}
 	
 
