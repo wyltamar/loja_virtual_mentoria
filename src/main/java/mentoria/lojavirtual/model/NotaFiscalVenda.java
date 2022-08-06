@@ -15,6 +15,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "nota_fiscal_venda")
 @SequenceGenerator(name = "seq_nota_fiscal_venda", sequenceName = "seq_nota_fiscal_venda", initialValue = 1, allocationSize = 1)
@@ -42,11 +44,13 @@ public class NotaFiscalVenda implements Serializable{
 	@Column(columnDefinition = "text", nullable = false)
 	private String pdf;
 	
+	@JsonIgnore
 	@OneToOne
 	@JoinColumn(name = "venda_compra_loja_virtual_id", nullable = true, foreignKey = 
 	@ForeignKey(value = ConstraintMode.CONSTRAINT, name = "venda_compra_loja_virtual_fk" ))
 	private VendaCompraLojaVirtual vendaCompraLojaVirtual;
 	
+	@JsonIgnore
 	@ManyToOne(targetEntity = PessoaJuridica.class)
 	@JoinColumn(name = "empresa_id", nullable = false, foreignKey = 
 	@ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
