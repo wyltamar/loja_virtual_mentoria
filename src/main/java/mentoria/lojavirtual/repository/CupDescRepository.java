@@ -13,7 +13,7 @@ import mentoria.lojavirtual.model.CupDesc;
 @Transactional
 public interface CupDescRepository extends JpaRepository<CupDesc, Long> {
 	
-	@Query(value = "select cd from CupDesc cd")
-	public List<CupDesc> carregarCuponsDesconto();
-
+	
+	@Query(value = "select cp from CupDesc cp where cp.empresa.id = ?1")
+	public List<CupDesc> buscarCuponDescontoPorEmpresa(Long idEmpresa);
 }

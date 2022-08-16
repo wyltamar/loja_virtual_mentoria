@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -36,9 +37,19 @@ public class FormaPagamentoContoller {
 	@GetMapping(value = "**/listarFormasDePagamento")
 	public ResponseEntity<List<FormaPagamento>>listarFormasDePagamento(){
 		
-		List<FormaPagamento> formasPagamento = formaPagamentoRepository.listarFormasDePagamento();
+		List<FormaPagamento> formasPagamentos = formaPagamentoRepository.findAll();
 		
-		return new ResponseEntity<List<FormaPagamento>>(formasPagamento, HttpStatus.OK);
+		return new ResponseEntity<List<FormaPagamento>>(formasPagamentos, HttpStatus.OK);
+		
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "**/listarFormasDePagamentoPorEmpresa/{idEmpresa}")
+	public ResponseEntity<List<FormaPagamento>>listarFormasDePagamentoPorEmpresa(@PathVariable("idEmpresa") Long idEmpresa){
+		
+		List<FormaPagamento> formasPagamentos = formaPagamentoRepository.findAll(idEmpresa);
+		
+		return new ResponseEntity<List<FormaPagamento>>(formasPagamentos, HttpStatus.OK);
 		
 	}
 	
