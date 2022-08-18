@@ -17,7 +17,7 @@ public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
 	@Query(value = "select u from Usuario u where u.login = ?1")
 	Usuario findUsuarioByLogin(String login);
 	
-	@Query(value = "select u from Usuario u where u.dataAtualSenha <= current_date - 13")
+	@Query(value = "select u from Usuario u where u.dataAtualSenha <= current_date - 90")
 	List<Usuario> usuarioSenhaVencida();
 
 	@Query(value="select constraint_name from information_schema.constraint_column_usage \r\n" + 
