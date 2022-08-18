@@ -29,7 +29,7 @@ public interface PessoaRepository extends CrudRepository<PessoaJuridica, Long> {
 	@Query(value = "select u from Usuario u where u.pessoa.id = ?1 or u.login = ?2")
 	public Usuario findUserByPessoa(Long id, String email);
 
-	@Query(value = "selec pj from PessoaJuridica pj where pj.nome like %?1%")
+	@Query(value = "select pj from PessoaJuridica pj where pj.nome like %?1%")
 	public List<PessoaJuridica> pesquisaPorNomePJ(String nome);
 	
 }
