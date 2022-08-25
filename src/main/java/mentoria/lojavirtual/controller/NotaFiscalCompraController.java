@@ -45,8 +45,8 @@ public class NotaFiscalCompraController {
 		
 		}
 		
-		if(notaFiscalCompra.getPessoa() == null || notaFiscalCompra.getPessoa().getId() <= 0) {
-			throw new ExceptionMentoriaJava("A PessoaJuridica da nota fiscal deve ser informada ");
+		if(notaFiscalCompra.getPessoaFornecedor() == null || notaFiscalCompra.getPessoaFornecedor().getId() <= 0) {
+			throw new ExceptionMentoriaJava("O Fornecedor(PessoaJuridica) da nota fiscal deve ser informada ");
 		}
 		
 		if(notaFiscalCompra.getEmpresa() == null || notaFiscalCompra.getEmpresa().getId() <= 0) {

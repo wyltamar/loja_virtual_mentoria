@@ -5,7 +5,7 @@ public enum StatusContaReceber {
 	COBRANCA ("Pagar"),
 	VENCIDA ("Vencida"),
 	ABERTA("Aberta"),
-	QUITADA ("Quit ada");
+	QUITADA ("Quitada");
 	
 	private String descricao;
 	
