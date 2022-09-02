@@ -52,7 +52,7 @@ public class MarcaProdutoController {
 		
 		marcaRepository.delete(marcaProduto);
 		
-		return new ResponseEntity<>("Maarca excluida com suceso", HttpStatus.OK);
+		return new ResponseEntity<>("Marca excluida com suceso", HttpStatus.OK);
 	}
 	
 	@ResponseBody
