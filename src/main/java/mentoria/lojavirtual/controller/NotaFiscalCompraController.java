@@ -40,7 +40,7 @@ public class NotaFiscalCompraController {
 		
 		List<RelatorioProdCompradoNotaFiscalDTO> relatorio = new ArrayList<RelatorioProdCompradoNotaFiscalDTO>();
 		
-		relatorio = notaFiscalCompraService.gerarRelatoriProdCompraNota(relatorioProdCompradoNotaFiscalDTO); 
+		relatorio = notaFiscalCompraService.gerarRelatorioProdCompraNota(relatorioProdCompradoNotaFiscalDTO); 
 		
 		return new ResponseEntity<List<RelatorioProdCompradoNotaFiscalDTO>>(relatorio, HttpStatus.OK);
 	}
