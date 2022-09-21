@@ -65,11 +65,22 @@ public class NotaFiscalCompraService {
 		return retorno;
 	}
 	
+	/**
+	 * Title: Relatório de alerta de estoque baixo
+	 * Este relatório mostra os produtos que estão com o estoque baixo,
+	 * de acordo com a regra de negócio de estoque baixo.
+	 * @param relatorio RelatorioProdAlertaEstoqueDTO
+	 * @param dataInicial
+	 * @param dataFinal
+	 * @return List<RelatorioProdAlertaEstoqueDTO>
+	 * 
+	 * @author wyltamar
+	 */
 	public List<RelatorioProdAlertaEstoqueDTO> gerarRelatorioAlertaEstoque(
 			RelatorioProdAlertaEstoqueDTO relatorio) {
 		
 		String sql = " select nip.produto_id as codigo_produto,prod.nome as nome_produto, " + 
-				" nfco.valor_total as valor_venda_produto,nip.quantidade as quantidade_comprada,pjf.id as cod_fornecedor, " + 
+				" nfco.valor_total as valor_venda_produto, nip.quantidade as quantidade_comprada, pjf.id as cod_fornecedor, " + 
 				" pjf.nome as nome_fornecedor,nfco.data_compra, " +
 				" prod.qtd_estoque as qtdEstoque, prod.qtd_alerta_estoque as qtdAlertaEstoque" +
 				" from nota_fiscal_compra as nfco " + 
@@ -77,10 +88,10 @@ public class NotaFiscalCompraService {
 				" inner join nota_item_produto as nip on nfco.id = nip.nota_fiscal_copra_id " + 
 				" inner join produto as prod on nip.produto_id = prod.id where ";
 		
-		sql += 	" nfco.data_compra >= '"+ relatorio.getDataInicial()+"' "; 
-		sql += 	" and nfco.data_compra <= '" +relatorio.getDataFinal()+"' ";
-		sql += 	" and prod.alerta_qtd_estoque = true ";
-		sql +=  " and prod.qtd_estoque <= prod.qtd_alerta_estoque ";
+		sql += " nfco.data_compra >= '"+ relatorio.getDataInicial()+"' "; 
+		sql += " and nfco.data_compra <= '" +relatorio.getDataFinal()+"' ";
+		sql += " and prod.alerta_qtd_estoque = true ";
+		sql += " and prod.qtd_estoque <= prod.qtd_alerta_estoque ";
 		
 		if(!relatorio.getCodigoNotaFiscalCompra().isEmpty()) {
 			sql += " and nfco.id = " +relatorio.getCodigoNotaFiscalCompra()+ " ";
