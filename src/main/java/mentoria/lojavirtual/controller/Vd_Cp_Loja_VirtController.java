@@ -30,6 +30,7 @@ import mentoria.lojavirtual.model.PessoaFisica;
 import mentoria.lojavirtual.model.StatusRastreio;
 import mentoria.lojavirtual.model.VendaCompraLojaVirtual;
 import mentoria.lojavirtual.model.dto.ItemVendaDTO;
+import mentoria.lojavirtual.model.dto.RelatorioCompraCanceladaDTO;
 import mentoria.lojavirtual.model.dto.VendaCompraLojaVirtualDTO;
 import mentoria.lojavirtual.repository.ContaReceberRepository;
 import mentoria.lojavirtual.repository.EnderecoRepository;
@@ -416,6 +417,19 @@ public class Vd_Cp_Loja_VirtController {
 		
 
 		return new ResponseEntity<List<VendaCompraLojaVirtualDTO>>(compraLojaVirtualDTOList, HttpStatus.OK);
+	}
+	
+	@ResponseBody
+	@PostMapping(value = "**/relatorioCompraCancelada")
+	public ResponseEntity<List<RelatorioCompraCanceladaDTO>> relatorioCompraCancelada(
+			@RequestBody RelatorioCompraCanceladaDTO relatorioCompraCancelada){
+		
+		List<RelatorioCompraCanceladaDTO> retorno = new ArrayList<RelatorioCompraCanceladaDTO>();
+		
+		retorno  = vendaService.gerarRelatorioCompraCancelada(relatorioCompraCancelada);
+		
+		return new ResponseEntity<List<RelatorioCompraCanceladaDTO>>(retorno,HttpStatus.OK);
+		
 	}
 
 }
