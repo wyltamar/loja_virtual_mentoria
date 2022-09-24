@@ -3,12 +3,15 @@ package mentoria.lojavirtual.model.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import javax.validation.constraints.NotEmpty;
+
 public class RelatorioCompraCanceladaDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
 	private Long codigoProduto;
 	
+	@NotEmpty(message = "O nome do produto deve ser informado")
 	private String nomeProduto;
 	
 	private String emailCliente;
@@ -25,6 +28,7 @@ public class RelatorioCompraCanceladaDTO implements Serializable {
 	
 	private Long codigoVenda;
 	
+	@NotEmpty(message = "O status da compra deve ser informado")
 	private String status;
 
 	public Long getCodigoProduto() {

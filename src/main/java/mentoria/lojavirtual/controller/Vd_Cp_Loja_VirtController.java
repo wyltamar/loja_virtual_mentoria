@@ -422,7 +422,7 @@ public class Vd_Cp_Loja_VirtController {
 	@ResponseBody
 	@PostMapping(value = "**/relatorioCompraCancelada")
 	public ResponseEntity<List<RelatorioCompraCanceladaDTO>> relatorioCompraCancelada(
-			@RequestBody RelatorioCompraCanceladaDTO relatorioCompraCancelada){
+		@Valid @RequestBody RelatorioCompraCanceladaDTO relatorioCompraCancelada){
 		
 		List<RelatorioCompraCanceladaDTO> retorno = new ArrayList<RelatorioCompraCanceladaDTO>();
 		
