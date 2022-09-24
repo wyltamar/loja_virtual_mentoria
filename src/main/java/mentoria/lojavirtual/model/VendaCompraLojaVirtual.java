@@ -10,6 +10,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
@@ -25,6 +27,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
+import mentoria.lojavirtual.enums.StatusVendaLojaVirtual;
 
 @Entity
 @Table(name = "vd_cp_loja_virt")
@@ -108,7 +112,20 @@ public class VendaCompraLojaVirtual implements Serializable {
 	
 	private Boolean excluido = Boolean.FALSE;
 	
+	@NotNull(message = "O campo Status da venda é obrigatório")
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	private StatusVendaLojaVirtual statusVendaLojaVirtual;
 	
+	
+	public StatusVendaLojaVirtual getStatusVendaLojaVirtual() {
+		return statusVendaLojaVirtual;
+	}
+
+	public void setStatusVendaLojaVirtual(StatusVendaLojaVirtual statusVendaLojaVirtual) {
+		this.statusVendaLojaVirtual = statusVendaLojaVirtual;
+	}
+
 	public Boolean getExcluido() {
 		return excluido;
 	}
