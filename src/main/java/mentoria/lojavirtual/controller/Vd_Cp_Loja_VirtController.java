@@ -30,6 +30,7 @@ import mentoria.lojavirtual.model.PessoaFisica;
 import mentoria.lojavirtual.model.StatusRastreio;
 import mentoria.lojavirtual.model.VendaCompraLojaVirtual;
 import mentoria.lojavirtual.model.dto.ItemVendaDTO;
+import mentoria.lojavirtual.model.dto.RelatorioCompraCanceladaDTO;
 import mentoria.lojavirtual.model.dto.VendaCompraLojaVirtualDTO;
 import mentoria.lojavirtual.repository.ContaReceberRepository;
 import mentoria.lojavirtual.repository.EnderecoRepository;
@@ -65,6 +66,22 @@ public class Vd_Cp_Loja_VirtController {
 	
 	@Autowired
 	private ServiceSendEmail serviceSendEmail;
+	
+	@ResponseBody
+	@PostMapping(value = "**/relatorioStatusVendaLoja")
+	public ResponseEntity<List<RelatorioCompraCanceladaDTO>> relatorioStatusVendaLoja(
+		@Valid @RequestBody	RelatorioCompraCanceladaDTO relatorioCompraCanceladaDTO)throws ExceptionMentoriaJava{
+		
+		List<RelatorioCompraCanceladaDTO> retorno = new ArrayList<RelatorioCompraCanceladaDTO>();
+		
+		retorno = vendaService.relatorioStatusVendaLoja(relatorioCompraCanceladaDTO);
+		
+		if(retorno.isEmpty()) {
+			throw new ExceptionMentoriaJava("Registro não encontrado em nossa base de dados");
+		}
+		
+		return new ResponseEntity<List<RelatorioCompraCanceladaDTO>>(retorno, HttpStatus.OK);
+	}
 
 	@ResponseBody
 	@PostMapping(value = "**/salvarVendaLoja")
