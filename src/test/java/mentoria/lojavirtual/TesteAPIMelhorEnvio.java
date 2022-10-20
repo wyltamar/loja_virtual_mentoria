@@ -1,8 +1,15 @@
 package mentoria.lojavirtual;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import mentoria.lojavirtual.enums.ApiTokenIntegracao;
+import mentoria.lojavirtual.model.dto.EmpresaTransporteDTO;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -28,7 +35,47 @@ public class TesteAPIMelhorEnvio {
 				  .addHeader("User-Agent", "wyltamarjavadev@gmail.com")
 				  .build();
 				Response response = client.newCall(request).execute();
-				System.out.println(response.body().string());
+				//System.out.println(response.body().string());
+				
+				JsonNode jsonNode = new ObjectMapper().readTree(response.body().string());
+				
+				Iterator<JsonNode> iterator = jsonNode.iterator();
+				
+				List<EmpresaTransporteDTO> empresaTransporteDTOList = new ArrayList<EmpresaTransporteDTO>();
+				
+				while(iterator.hasNext()) {
+					JsonNode node = iterator.next();
+					
+					EmpresaTransporteDTO empresaTransporteDTO = new EmpresaTransporteDTO();
+					
+					if(node.get("id") != null) {
+						empresaTransporteDTO.setId(node.get("id").asText()); 
+					}
+					
+					if(node.get("name") != null) {
+						empresaTransporteDTO.setNome(node.get("name").asText());
+					}
+					
+					if(node.get("price") != null) {
+						empresaTransporteDTO.setValor(node.get("price").asText());
+					}
+					
+					if(node.get("company").get("name") != null) {
+						empresaTransporteDTO.setEmpresa(node.get("company").get("name").asText());
+					}
+					
+					if(node.get("company").get("picture") != null) {
+						empresaTransporteDTO.setPicture(node.get("company").get("picture").asText());
+					}
+					
+					if(empresaTransporteDTO.dadosOK()) {
+						empresaTransporteDTOList.add(empresaTransporteDTO);
+					}
+					
+				}
+				
+				System.out.println(empresaTransporteDTOList);
+				
 	}
 
 }

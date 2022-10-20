@@ -1,5 +1,6 @@
 package mentoria.lojavirtual.controller;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -29,6 +30,8 @@ import mentoria.lojavirtual.model.ItemVendaLoja;
 import mentoria.lojavirtual.model.PessoaFisica;
 import mentoria.lojavirtual.model.StatusRastreio;
 import mentoria.lojavirtual.model.VendaCompraLojaVirtual;
+import mentoria.lojavirtual.model.dto.ConsultaFreteDTO;
+import mentoria.lojavirtual.model.dto.EmpresaTransporteDTO;
 import mentoria.lojavirtual.model.dto.ItemVendaDTO;
 import mentoria.lojavirtual.model.dto.RelatorioCompraCanceladaDTO;
 import mentoria.lojavirtual.model.dto.VendaCompraLojaVirtualDTO;
@@ -37,6 +40,7 @@ import mentoria.lojavirtual.repository.EnderecoRepository;
 import mentoria.lojavirtual.repository.NotaFiscalVendaRepository;
 import mentoria.lojavirtual.repository.StatusRastreioRepository;
 import mentoria.lojavirtual.repository.Vd_Cp_Loja_VirtRepository;
+import mentoria.lojavirtual.service.ConsultaFreteService;
 import mentoria.lojavirtual.service.ServiceSendEmail;
 import mentoria.lojavirtual.service.VendaService;
 
@@ -66,6 +70,9 @@ public class Vd_Cp_Loja_VirtController {
 	
 	@Autowired
 	private ServiceSendEmail serviceSendEmail;
+	
+	@Autowired
+	private ConsultaFreteService consultaFreteService;
 	
 	@ResponseBody
 	@PostMapping(value = "**/relatorioStatusVendaLoja")
@@ -434,5 +441,16 @@ public class Vd_Cp_Loja_VirtController {
 
 		return new ResponseEntity<List<VendaCompraLojaVirtualDTO>>(compraLojaVirtualDTOList, HttpStatus.OK);
 	}
+	
+	@ResponseBody
+	@PostMapping(value = "**/calcular-frete")
+	public ResponseEntity<List<EmpresaTransporteDTO>> calcularFrete(@RequestBody ConsultaFreteDTO consultaFreteDTO) throws IOException{
+		
+		List<EmpresaTransporteDTO> empresaTransporteDTOList = consultaFreteService.calcularFrete(consultaFreteDTO);
+		
+		return new ResponseEntity<List<EmpresaTransporteDTO>>(empresaTransporteDTOList, HttpStatus.OK);
+	}
+	
+	
 
 }
