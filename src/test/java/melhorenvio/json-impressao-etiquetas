@@ -1,0 +1,15 @@
+/*JSON para impressao da etiqueta*/
+
+{
+    "mode": "private",
+    "orders": [
+        "78417fae-eda6-4808-8700-93a24d919c10"
+    ]
+}
+
+/*JSON resposta para impressão de etiquetas*/
+
+{
+  "url": "http://sandbox.melhorenvio.com.br/imprimir/MeHd4jtwDrES"
+}
+

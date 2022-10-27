@@ -1,0 +1,15 @@
+/*JSON para geração da etiqueta*/
+{
+    "orders": [
+        "78417fae-eda6-4808-8700-93a24d919c10"
+    ]
+}
+
+/*JSON de esposta da API na geração de etiquetas */
+
+{
+  "78417fae-eda6-4808-8700-93a24d919c10": {
+    "status": true,
+    "message": "Envio gerado com sucesso"
+  }
+}
