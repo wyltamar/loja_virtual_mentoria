@@ -10,6 +10,7 @@ public class Product2DTO implements Serializable {
 	private String name;
 	private String quantity;
 	private String unitary_value;
+	
 	public String getName() {
 		return name;
 	}

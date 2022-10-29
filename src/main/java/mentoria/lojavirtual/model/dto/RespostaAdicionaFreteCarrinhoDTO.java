@@ -19,6 +19,7 @@ public class RespostaAdicionaFreteCarrinhoDTO implements Serializable {
 	private List<Product2DTO> products;
 	private List<VolumeDTO> volumes;
 	private List<TagDTO> tags;
+	
 	public String getId() {
 		return id;
 	}

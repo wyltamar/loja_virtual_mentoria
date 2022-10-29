@@ -30,16 +30,19 @@ import mentoria.lojavirtual.model.ItemVendaLoja;
 import mentoria.lojavirtual.model.PessoaFisica;
 import mentoria.lojavirtual.model.StatusRastreio;
 import mentoria.lojavirtual.model.VendaCompraLojaVirtual;
+import mentoria.lojavirtual.model.dto.AdicionaFreteCarrinhoDTO;
 import mentoria.lojavirtual.model.dto.ConsultaFreteDTO;
 import mentoria.lojavirtual.model.dto.EmpresaTransporteDTO;
 import mentoria.lojavirtual.model.dto.ItemVendaDTO;
 import mentoria.lojavirtual.model.dto.RelatorioCompraCanceladaDTO;
+import mentoria.lojavirtual.model.dto.RespostaAdicionaFreteCarrinhoDTO;
 import mentoria.lojavirtual.model.dto.VendaCompraLojaVirtualDTO;
 import mentoria.lojavirtual.repository.ContaReceberRepository;
 import mentoria.lojavirtual.repository.EnderecoRepository;
 import mentoria.lojavirtual.repository.NotaFiscalVendaRepository;
 import mentoria.lojavirtual.repository.StatusRastreioRepository;
 import mentoria.lojavirtual.repository.Vd_Cp_Loja_VirtRepository;
+import mentoria.lojavirtual.service.AdicionaFreteCarrinhoService;
 import mentoria.lojavirtual.service.ConsultaFreteService;
 import mentoria.lojavirtual.service.ServiceSendEmail;
 import mentoria.lojavirtual.service.VendaService;
@@ -73,6 +76,8 @@ public class Vd_Cp_Loja_VirtController {
 	
 	@Autowired
 	private ConsultaFreteService consultaFreteService;
+	
+	private AdicionaFreteCarrinhoService adicionaFreteCarrinhoService;
 	
 	@ResponseBody
 	@PostMapping(value = "**/relatorioStatusVendaLoja")
@@ -451,6 +456,16 @@ public class Vd_Cp_Loja_VirtController {
 		return new ResponseEntity<List<EmpresaTransporteDTO>>(empresaTransporteDTOList, HttpStatus.OK);
 	}
 	
+	@ResponseBody
+	@PostMapping(value = "**/adiciona-frete-carrinho")
+	public ResponseEntity<List<RespostaAdicionaFreteCarrinhoDTO>> adicionaFreteCarrinho(
+			@RequestBody AdicionaFreteCarrinhoDTO adicionaFreteCarrinhoDTO) throws IOException{
+		
+		List<RespostaAdicionaFreteCarrinhoDTO> respostaList = adicionaFreteCarrinhoService.adicionarFreteCarrinho(adicionaFreteCarrinhoDTO);
+		
+		return new ResponseEntity<List<RespostaAdicionaFreteCarrinhoDTO>>(respostaList, HttpStatus.OK);
+		
+	}
 	
 
 }
