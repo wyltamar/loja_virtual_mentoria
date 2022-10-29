@@ -77,6 +77,7 @@ public class Vd_Cp_Loja_VirtController {
 	@Autowired
 	private ConsultaFreteService consultaFreteService;
 	
+	@Autowired
 	private AdicionaFreteCarrinhoService adicionaFreteCarrinhoService;
 	
 	@ResponseBody

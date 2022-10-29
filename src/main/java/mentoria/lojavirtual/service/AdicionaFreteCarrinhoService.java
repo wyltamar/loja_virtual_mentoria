@@ -56,7 +56,6 @@ public class AdicionaFreteCarrinhoService {
 		
 		while(iterator.hasNext()) {
 			
-			
 			JsonNode jsonNode = iterator.next();
 			
 			RespostaAdicionaFreteCarrinhoDTO  freteCarrinhoDTO = new RespostaAdicionaFreteCarrinhoDTO();

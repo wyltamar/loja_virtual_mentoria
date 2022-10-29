@@ -92,6 +92,7 @@ public class RespostaAdicionaFreteCarrinhoDTO implements Serializable {
 	public void setTags(List<TagDTO> tags) {
 		this.tags = tags;
 	}
+	
 	@Override
 	public String toString() {
 		return "RespostaAdicionaFreteCarrinhoDTO [id=" + id + ", protocol=" + protocol + ", service_id=" + service_id
