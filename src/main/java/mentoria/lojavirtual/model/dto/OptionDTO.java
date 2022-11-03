@@ -1,45 +1,47 @@
 package mentoria.lojavirtual.model.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class OptionDTO implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
-	private String insurance_value;
-	private String receipt;
-	private String own_hand;
-	private String reverse;
-	private String non_commercial;
+	private BigDecimal insurance_value;
+	private boolean receipt;
+	private boolean own_hand;
+	private boolean reverse;
+	private boolean non_commercial;
 	private InvoiceDTO invoice;
-	public String getInsurance_value() {
+	
+	public BigDecimal getInsurance_value() {
 		return insurance_value;
 	}
-	public void setInsurance_value(String insurance_value) {
+	public void setInsurance_value(BigDecimal insurance_value) {
 		this.insurance_value = insurance_value;
 	}
-	public String getReceipt() {
+	public boolean getReceipt() {
 		return receipt;
 	}
-	public void setReceipt(String receipt) {
+	public void setReceipt(boolean receipt) {
 		this.receipt = receipt;
 	}
-	public String getOwn_hand() {
+	public boolean getOwn_hand() {
 		return own_hand;
 	}
-	public void setOwn_hand(String own_hand) {
+	public void setOwn_hand(boolean own_hand) {
 		this.own_hand = own_hand;
 	}
-	public String getReverse() {
+	public boolean getReverse() {
 		return reverse;
 	}
-	public void setReverse(String reverse) {
+	public void setReverse(boolean reverse) {
 		this.reverse = reverse;
 	}
-	public String getNon_commercial() {
+	public boolean getNon_commercial() {
 		return non_commercial;
 	}
-	public void setNon_commercial(String non_commercial) {
+	public void setNon_commercial(boolean non_commercial) {
 		this.non_commercial = non_commercial;
 	}
 	public InvoiceDTO getInvoice() {

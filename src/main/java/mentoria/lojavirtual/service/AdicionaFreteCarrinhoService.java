@@ -136,7 +136,9 @@ public class AdicionaFreteCarrinhoService {
 				
 			}
 			
+			if(freteCarrinhoDTO.dadosOk()) {
 			adicionaFreteCarrinhoList.add(freteCarrinhoDTO);
+			}
 				
 		}
 		

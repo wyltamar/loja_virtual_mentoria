@@ -93,6 +93,19 @@ public class RespostaAdicionaFreteCarrinhoDTO implements Serializable {
 		this.tags = tags;
 	}
 	
+	public boolean dadosOk() {
+		
+		if(this.delivery_max != null && this.delivery_min != null && this.format != null && this.id != null
+			&& this.insurance_value != null && this.price != null && !this.products.isEmpty() && 
+			this.protocol != null && this.service_id != null && this.status != null &&
+			!this.tags.isEmpty() && !this.volumes.isEmpty() ) {
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
 	@Override
 	public String toString() {
 		return "RespostaAdicionaFreteCarrinhoDTO [id=" + id + ", protocol=" + protocol + ", service_id=" + service_id
