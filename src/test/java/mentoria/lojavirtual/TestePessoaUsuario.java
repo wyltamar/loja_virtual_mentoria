@@ -46,7 +46,7 @@ public class TestePessoaUsuario extends TestCase{
 		endereco1.setEmpresa(pessoaJuridica);
 		endereco1.setLogradouro("Rua Delmiro Pereira da Silva");
 		endereco1.setNumero("12");
-		endereco1.setPessoa(pessoaJuridica);
+		//endereco1.setPessoa(pessoaJuridica);
 		endereco1.setTipoEndereco(TipoEndereco.ENTREGA);
 		endereco1.setUf("PB");
 		

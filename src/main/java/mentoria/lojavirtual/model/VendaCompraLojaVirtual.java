@@ -117,7 +117,40 @@ public class VendaCompraLojaVirtual implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private StatusVendaLojaVirtual statusVendaLojaVirtual;
 	
+	@Column(name = "codigo_etiqueta")
+	private String codigoEtiqueta;
 	
+	@Column(name = "url_imprime_etiqueta")
+	private String urlImpressaoEtiqueta;
+	
+	/*Frete escolhido pelo cliente no momento da compra*/
+	private String servicoTransportadora;
+	
+	
+	public String getServicoTransportadora() {
+		return servicoTransportadora;
+	}
+
+	public void setServicoTransportadora(String servicoTransportadora) {
+		this.servicoTransportadora = servicoTransportadora;
+	}
+
+	public String getCodigoEtiqueta() {
+		return codigoEtiqueta;
+	}
+
+	public void setCodigoEtiqueta(String codigoEtiqueta) {
+		this.codigoEtiqueta = codigoEtiqueta;
+	}
+
+	public String getUrlImpressaoEtiqueta() {
+		return urlImpressaoEtiqueta;
+	}
+
+	public void setUrlImpressaoEtiqueta(String urlImpressaoEtiqueta) {
+		this.urlImpressaoEtiqueta = urlImpressaoEtiqueta;
+	}
+
 	public StatusVendaLojaVirtual getStatusVendaLojaVirtual() {
 		return statusVendaLojaVirtual;
 	}

@@ -1,4 +1,4 @@
-/*JSON de requisição inserir frete no carrinho*/
+/*JSON que envia dados( faz a requisição) para inserir frete no carrinho*/
 
 {
   "service": 3,
