@@ -68,7 +68,7 @@ public abstract class Pessoa implements Serializable {
 		
 		Endereco enderecoRetorno = null;
 		
-		for (Endereco endereco : enderecos) {
+		for (Endereco endereco : this.enderecos) {
 			
 			if(endereco.getTipoEndereco().name().equals(TipoEndereco.ENTREGA.name())) {
 				enderecoRetorno = endereco;

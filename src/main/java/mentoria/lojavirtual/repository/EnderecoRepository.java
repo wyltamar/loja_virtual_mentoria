@@ -13,7 +13,10 @@ import mentoria.lojavirtual.model.Endereco;
 @Transactional
 public interface EnderecoRepository extends JpaRepository<Endereco, Long>  {
 
+	@Query(value = "select e from Endereco e where e.empresa.id = ?1")
+	public List<Endereco> enderecoPj(Long idEmpresa);
+	
 	@Query(value = "select e from Endereco e where e.pessoa.id = ?1")
-	public List<Endereco> buscarEnderecosPessoa(Long idPessoa);
+	public List<Endereco> enderecoPf(Long idPessoaFisica);
 
 }

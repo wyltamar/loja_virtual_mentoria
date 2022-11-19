@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -86,6 +87,9 @@ public class Vd_Cp_Loja_VirtController {
 	
 	@Autowired
 	private ConsultaFreteService consultaFreteService;
+	
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
 	
 	@ResponseBody
 	@PostMapping(value = "**/relatorioStatusVendaLoja")
@@ -474,8 +478,11 @@ public class Vd_Cp_Loja_VirtController {
 			 return new ResponseEntity<String>("Venda não encontrada", HttpStatus.OK);
 		}
 		
+		List<Endereco> enderecos = enderecoRepository.enderecoPj(vendaCompraLojaVirtual.getEmpresa().getId());
+		vendaCompraLojaVirtual.getEmpresa().setEnderecos(enderecos);
+		
 		EnvioEtiquetaDTO envioEtiquetaDTO = new EnvioEtiquetaDTO();
-		envioEtiquetaDTO.setService("3");
+		envioEtiquetaDTO.setService(vendaCompraLojaVirtual.getServicoTransportadora());
 		envioEtiquetaDTO.setAgency("49");
 		envioEtiquetaDTO.getFrom().setName(vendaCompraLojaVirtual.getEmpresa().getNome());
 		envioEtiquetaDTO.getFrom().setPhone(vendaCompraLojaVirtual.getEmpresa().getTelefone());
@@ -492,20 +499,19 @@ public class Vd_Cp_Loja_VirtController {
 		envioEtiquetaDTO.getFrom().setNote("Qualquer coisa");
 		
 		
-		
 		envioEtiquetaDTO.getTo().setName(vendaCompraLojaVirtual.getPessoa().getNome());
 		envioEtiquetaDTO.getTo().setPhone(vendaCompraLojaVirtual.getPessoa().getTelefone());
 		envioEtiquetaDTO.getTo().setEmail(vendaCompraLojaVirtual.getPessoa().getEmail());
 		envioEtiquetaDTO.getTo().setDocument(vendaCompraLojaVirtual.getPessoa().getCpf());
-		envioEtiquetaDTO.getTo().setAddress(vendaCompraLojaVirtual.getPessoa().enderecoEntrega().getLogradouro());
-		envioEtiquetaDTO.getTo().setComplement(vendaCompraLojaVirtual.getPessoa().enderecoEntrega().getComplemento());
-		envioEtiquetaDTO.getTo().setNumber(vendaCompraLojaVirtual.getPessoa().enderecoEntrega().getNumero());
-		envioEtiquetaDTO.getTo().setDistrict(vendaCompraLojaVirtual.getPessoa().enderecoEntrega().getBairro());
-		envioEtiquetaDTO.getTo().setCity(vendaCompraLojaVirtual.getPessoa().enderecoEntrega().getCidade());
-		envioEtiquetaDTO.getTo().setState_abbr(vendaCompraLojaVirtual.getPessoa().enderecoEntrega().getUf());
+		envioEtiquetaDTO.getTo().setAddress("Endereço do destinatário");
+		envioEtiquetaDTO.getTo().setComplement("Complemento");
+		envioEtiquetaDTO.getTo().setNumber("2");
+		envioEtiquetaDTO.getTo().setDistrict("Bairro");
+		envioEtiquetaDTO.getTo().setCity("Porto Alegre");
+		envioEtiquetaDTO.getTo().setState_abbr("RS");
 		envioEtiquetaDTO.getTo().setCountry_id("BR");
-		envioEtiquetaDTO.getTo().setPostal_code(vendaCompraLojaVirtual.getPessoa().enderecoEntrega().getCep());
-		envioEtiquetaDTO.getTo().setNote("Não há");
+		envioEtiquetaDTO.getTo().setPostal_code("90570020");
+		envioEtiquetaDTO.getTo().setNote("Observação");
 		
 		List<ProductEnvioEtiquetaDTO> products = new ArrayList<ProductEnvioEtiquetaDTO>();
 		
@@ -541,7 +547,7 @@ public class Vd_Cp_Loja_VirtController {
 		envioEtiquetaDTO.getOptions().setOwn_hand(false);
 		envioEtiquetaDTO.getOptions().setReverse(false);
 		envioEtiquetaDTO.getOptions().setNon_commercial(false);
-		envioEtiquetaDTO.getOptions().getInvoice().setKey(vendaCompraLojaVirtual.getNotaFiscalVenda().getNumero());
+		envioEtiquetaDTO.getOptions().getInvoice().setKey("31190307586261000184550010000092481404848162");
 		envioEtiquetaDTO.getOptions().setPlataform(vendaCompraLojaVirtual.getEmpresa().getNomeFantasia());
 		
 		TagEnvioEtiquetaDTO tagEnvioEtiquetaDTO = new TagEnvioEtiquetaDTO();
@@ -554,12 +560,11 @@ public class Vd_Cp_Loja_VirtController {
 				String jsonEnvio = mapper.writeValueAsString(envioEtiquetaDTO);
 		
 				/*Insere etiqueta no carrinho*/
-				okhttp3.OkHttpClient client = new okhttp3.OkHttpClient().newBuilder()
-				  .build();
+				okhttp3.OkHttpClient client = new okhttp3.OkHttpClient().newBuilder().build();
 				okhttp3.MediaType mediaType = okhttp3.MediaType.parse("application/json");
 				okhttp3.RequestBody body = okhttp3.RequestBody.create(mediaType, jsonEnvio);
 				okhttp3.Request request = new okhttp3.Request.Builder()
-				  .url(ApiTokenIntegracao.URL_MELHOR_ENVIO_SAND_BOX +"api/v2/me/cart")
+				  .url(ApiTokenIntegracao.URL_MELHOR_ENVIO_SAND_BOX+"api/v2/me/cart")
 				  .method("POST", body)
 				  .addHeader("Accept", "application/json")
 				  .addHeader("Content-Type", "application/json")
@@ -569,7 +574,13 @@ public class Vd_Cp_Loja_VirtController {
 				
 				okhttp3.Response response = client.newCall(request).execute();
 				
-				JsonNode jsonNode = new ObjectMapper().readTree(response.body().string());
+				String respostaJson = response.body().string();
+				
+				if(respostaJson.contains("error")) {
+					throw new ExceptionMentoriaJava(respostaJson);
+				}
+				
+				JsonNode jsonNode = new ObjectMapper().readTree(respostaJson);
 				
 				Iterator<JsonNode> iterator = jsonNode.iterator();
 				
@@ -577,12 +588,18 @@ public class Vd_Cp_Loja_VirtController {
 				
 				while(iterator.hasNext()) {
 					JsonNode node = iterator.next();
-					idEtiqueta = node.get("id").asText();
+					if(node.get("id") != null) {
+						idEtiqueta = node.get("id").asText();	
+					}else {
+						idEtiqueta = node.asText();
+					}
+					
 					break;
 				}
 				
 				/*Salvando o código da etiqueta*/
-				vd_Cp_Loja_VirtRepository.updateEtiqueta(idEtiqueta, vendaCompraLojaVirtual.getId());
+				jdbcTemplate.execute("begin;update vd_cp_loja_virt set codigo_etiqueta = '"+idEtiqueta+"' where id = "+vendaCompraLojaVirtual.getId()+" ;commit;");
+				//vd_Cp_Loja_VirtRepository.updateEtiqueta(idEtiqueta, vendaCompraLojaVirtual.getId());
 				
 				/*Compra da etiqueta*/
 				okhttp3.OkHttpClient clientCompra = new okhttp3.OkHttpClient().newBuilder().build();
@@ -641,9 +658,11 @@ public class Vd_Cp_Loja_VirtController {
 				
 				String urlEtiqueta = responseIm.body().string();
 				
-				vd_Cp_Loja_VirtRepository.updateUrlEtiqueta(urlEtiqueta, vendaCompraLojaVirtual.getId());
+				/*Atualizando url da etiqueta direto no banco */
+				jdbcTemplate.execute("begin;update vd_cp_loja_virt set url_imprime_etiqueta = '"+urlEtiqueta+"' where id = "+vendaCompraLojaVirtual.getId()+" ;commit;");
+				//vd_Cp_Loja_VirtRepository.updateUrlEtiqueta(urlEtiqueta, vendaCompraLojaVirtual.getId());
 				
-		return new ResponseEntity<String>("Sucesso", HttpStatus.OK);
+		return new ResponseEntity<String>("Tudo pronto com a sua etiqueta", HttpStatus.OK);
 	}
 	
 	
