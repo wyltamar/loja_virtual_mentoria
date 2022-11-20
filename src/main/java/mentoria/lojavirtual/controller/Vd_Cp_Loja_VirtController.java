@@ -36,6 +36,7 @@ import mentoria.lojavirtual.model.ItemVendaLoja;
 import mentoria.lojavirtual.model.PessoaFisica;
 import mentoria.lojavirtual.model.StatusRastreio;
 import mentoria.lojavirtual.model.VendaCompraLojaVirtual;
+import mentoria.lojavirtual.model.dto.AgencyTransportadoraDTO;
 import mentoria.lojavirtual.model.dto.ConsultaFreteDTO;
 import mentoria.lojavirtual.model.dto.EmpresaTransporteDTO;
 import mentoria.lojavirtual.model.dto.EnvioEtiquetaDTO;
@@ -51,12 +52,9 @@ import mentoria.lojavirtual.repository.NotaFiscalVendaRepository;
 import mentoria.lojavirtual.repository.StatusRastreioRepository;
 import mentoria.lojavirtual.repository.Vd_Cp_Loja_VirtRepository;
 import mentoria.lojavirtual.service.ConsultaFreteService;
+import mentoria.lojavirtual.service.ListarAgenciaTransportadoraService;
 import mentoria.lojavirtual.service.ServiceSendEmail;
 import mentoria.lojavirtual.service.VendaService;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 @RestController
 public class Vd_Cp_Loja_VirtController {
@@ -90,6 +88,9 @@ public class Vd_Cp_Loja_VirtController {
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	private ListarAgenciaTransportadoraService listarAgenciaTransportadoraService;
 	
 	@ResponseBody
 	@PostMapping(value = "**/relatorioStatusVendaLoja")
@@ -663,6 +664,17 @@ public class Vd_Cp_Loja_VirtController {
 				//vd_Cp_Loja_VirtRepository.updateUrlEtiqueta(urlEtiqueta, vendaCompraLojaVirtual.getId());
 				
 		return new ResponseEntity<String>("Tudo pronto com a sua etiqueta", HttpStatus.OK);
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "**/listar-agencias-transportadora")
+	public ResponseEntity<List<AgencyTransportadoraDTO>> listarAgenciasTransportadora() throws IOException, ExceptionMentoriaJava{
+		
+		List<AgencyTransportadoraDTO> agenciesListRetorno = new ArrayList<AgencyTransportadoraDTO>();
+				
+		agenciesListRetorno = listarAgenciaTransportadoraService.listarAgenciasTransportadoraME();
+		
+		return new ResponseEntity<List<AgencyTransportadoraDTO>>(agenciesListRetorno, HttpStatus.OK);
 	}
 	
 	
