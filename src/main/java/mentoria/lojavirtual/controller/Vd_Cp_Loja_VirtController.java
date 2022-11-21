@@ -55,6 +55,8 @@ import mentoria.lojavirtual.service.ConsultaFreteService;
 import mentoria.lojavirtual.service.ListarAgenciaTransportadoraService;
 import mentoria.lojavirtual.service.ServiceSendEmail;
 import mentoria.lojavirtual.service.VendaService;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
 
 @RestController
 public class Vd_Cp_Loja_VirtController {
@@ -467,6 +469,28 @@ public class Vd_Cp_Loja_VirtController {
 		List<EmpresaTransporteDTO> empresaTransporteDTOList = consultaFreteService.calcularFrete(consultaFreteDTO);
 		
 		return new ResponseEntity<List<EmpresaTransporteDTO>>(empresaTransporteDTOList, HttpStatus.OK);
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "**/cancela-etiqueta/{idEtiqueta}/{descricao}")
+	public ResponseEntity<String> cancelaEtiqueta(@PathVariable String idEtiqueta, @PathVariable String descricao) throws IOException{
+		
+		okhttp3.OkHttpClient client = new OkHttpClient().newBuilder().build();
+				okhttp3.MediaType mediaType = okhttp3.MediaType.parse("application/json");
+				okhttp3.RequestBody body = okhttp3.RequestBody.create(mediaType, "{\n    \"order\": {\n        \"id\": \""+idEtiqueta+"\",\n        \"reason_id\": \"2\",\n        \"description\": \""+descricao+"\"\n    }\n}");
+				okhttp3.Request request = new okhttp3.Request.Builder()
+				  .url(ApiTokenIntegracao.URL_MELHOR_ENVIO_SAND_BOX+"api/v2/me/shipment/cancel")
+				  .method("POST", body)
+				  .addHeader("Accept", "application/json")
+				  .addHeader("Content-Type", "application/json")
+				  .addHeader("Authorization", "Bearer "+ ApiTokenIntegracao.TOKEN_MELHOR_ENVIO_SAND_BOX)
+				  .addHeader("User-Agent", "wyltamarjavadev@gmail.com")
+				  .build();
+				okhttp3.Response response = client.newCall(request).execute();
+				
+				String respostaJson = response.body().string();
+				
+			return new ResponseEntity<String>(respostaJson, HttpStatus.OK);
 	}
 	
 	@ResponseBody
