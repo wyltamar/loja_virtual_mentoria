@@ -41,6 +41,8 @@ import mentoria.lojavirtual.model.dto.ConsultaFreteDTO;
 import mentoria.lojavirtual.model.dto.EmpresaTransporteDTO;
 import mentoria.lojavirtual.model.dto.EnvioEtiquetaDTO;
 import mentoria.lojavirtual.model.dto.ItemVendaDTO;
+import mentoria.lojavirtual.model.dto.ObjCancelaEtiquetaDTO;
+import mentoria.lojavirtual.model.dto.ObjRetornoCancelamentoEtiquetaDTO;
 import mentoria.lojavirtual.model.dto.ProductEnvioEtiquetaDTO;
 import mentoria.lojavirtual.model.dto.RelatorioCompraCanceladaDTO;
 import mentoria.lojavirtual.model.dto.TagEnvioEtiquetaDTO;
@@ -52,6 +54,7 @@ import mentoria.lojavirtual.repository.NotaFiscalVendaRepository;
 import mentoria.lojavirtual.repository.StatusRastreioRepository;
 import mentoria.lojavirtual.repository.Vd_Cp_Loja_VirtRepository;
 import mentoria.lojavirtual.service.ConsultaFreteService;
+import mentoria.lojavirtual.service.EtiquetaService;
 import mentoria.lojavirtual.service.ListarAgenciaTransportadoraService;
 import mentoria.lojavirtual.service.ServiceSendEmail;
 import mentoria.lojavirtual.service.VendaService;
@@ -93,6 +96,9 @@ public class Vd_Cp_Loja_VirtController {
 	
 	@Autowired
 	private ListarAgenciaTransportadoraService listarAgenciaTransportadoraService;
+	
+	@Autowired
+	private EtiquetaService etiquetaService;
 	
 	@ResponseBody
 	@PostMapping(value = "**/relatorioStatusVendaLoja")
@@ -491,6 +497,26 @@ public class Vd_Cp_Loja_VirtController {
 				String respostaJson = response.body().string();
 				
 			return new ResponseEntity<String>(respostaJson, HttpStatus.OK);
+	}
+	@ResponseBody
+	@PostMapping(value = "**/cancela-etiqueta2")
+	public ResponseEntity<ObjRetornoCancelamentoEtiquetaDTO> cancelaEtiqueta2(@RequestBody ObjCancelaEtiquetaDTO cancelaEtiquetaDTO ) throws ExceptionMentoriaJava, IOException{
+		
+		if(cancelaEtiquetaDTO.getId() == null) {
+			throw new ExceptionMentoriaJava("O id da etiqueta é obrigatório");
+		}
+		
+		if(cancelaEtiquetaDTO.getReason_id() == null) {
+			throw new ExceptionMentoriaJava("O reason_id deve ser sempre 2");
+		}
+		
+		if(cancelaEtiquetaDTO.getDescription() == null) {
+			throw new ExceptionMentoriaJava("Informe uma breve descrição para o motivo do cancelamento");
+		}
+		 
+		
+		return new ResponseEntity<ObjRetornoCancelamentoEtiquetaDTO>(etiquetaService.cancelarEtiqueta(cancelaEtiquetaDTO.getId(), 
+				cancelaEtiquetaDTO.getDescription(), cancelaEtiquetaDTO.getReason_id()),HttpStatus.OK);
 	}
 	
 	@ResponseBody
