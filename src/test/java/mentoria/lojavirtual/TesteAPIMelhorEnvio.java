@@ -15,7 +15,7 @@ public class TesteAPIMelhorEnvio {
 		
 			/*Listar agências*/	
 		
-			OkHttpClient client = new OkHttpClient().newBuilder().build();
+		/*	OkHttpClient client = new OkHttpClient().newBuilder().build();
 				MediaType mediaType = MediaType.parse("text/plain");
 				RequestBody body = RequestBody.create(mediaType, "");
 				Request request = new Request.Builder()
@@ -25,7 +25,26 @@ public class TesteAPIMelhorEnvio {
 				  .build();
 				Response response = client.newCall(request).execute();
 				
+				System.out.println(response.body().string()); */
+		
+			/*Testando o rastreio de envios*/
+			OkHttpClient client = new OkHttpClient().newBuilder().build();
+				MediaType mediaType = MediaType.parse("application/json");
+				RequestBody body = RequestBody.create(mediaType, "{\n    \"orders\": [\n        \"78417fae-eda6-4808-8700-93a24d919c10\"\n    ]\n}");
+				Request request = new Request.Builder()
+				  .url(ApiTokenIntegracao.URL_MELHOR_ENVIO_SAND_BOX+"api/v2/me/shipment/tracking")
+				  .method("POST", body)
+				  .addHeader("Accept", "application/json")
+				  .addHeader("Content-Type", "application/json")
+				  .addHeader("Authorization", "Bearer " +ApiTokenIntegracao.TOKEN_MELHOR_ENVIO_SAND_BOX)
+				  .addHeader("User-Agent", "wyltamarjavadev@gamail.com")
+				  .build();
+				Response response = client.newCall(request).execute();
+				
 				System.out.println(response.body().string());
+				
+				
+				
 				
 	}
 
