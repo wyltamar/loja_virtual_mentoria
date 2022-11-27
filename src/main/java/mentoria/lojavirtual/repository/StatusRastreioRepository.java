@@ -18,7 +18,7 @@ public interface StatusRastreioRepository extends JpaRepository<StatusRastreio, 
 	public List<StatusRastreio> listaRastreioVenda(Long idVenda);
 
 	@Modifying(flushAutomatically = true)
-	@Query(nativeQuery = true, value = "update vd_cp_loja_virt set url_rastreio = ?1 where id = ?2")
+	@Query(nativeQuery = true, value = "update status_rastreio set url_rastreio = ?1 where venda_compra_loja_virtual_id = ?2")
 	public void salvarUrlRastreio(String urlRastreio, Long idVenda);
 	
 	

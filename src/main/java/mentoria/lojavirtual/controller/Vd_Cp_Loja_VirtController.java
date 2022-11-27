@@ -718,7 +718,7 @@ public class Vd_Cp_Loja_VirtController {
 				
 				Response responseR = clientR.newCall(requestR).execute();
 				
-				JsonNode jsonNodeR = new ObjectMapper().readTree(response.body().string());
+				JsonNode jsonNodeR = new ObjectMapper().readTree(responseR.body().string());
 				
 				Iterator<JsonNode> iteradorR = jsonNodeR.iterator();
 				

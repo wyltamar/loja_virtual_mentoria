@@ -123,21 +123,10 @@ public class VendaCompraLojaVirtual implements Serializable {
 	@Column(name = "url_imprime_etiqueta")
 	private String urlImpressaoEtiqueta;
 	
-	@Column(name = "url_rastreio")
-	private String urlRastreio;
-	
+
 	/*Frete escolhido pelo cliente no momento da compra*/
 	private String servicoTransportadora;
 	
-	
-	public String getUrlRastreio() {
-		return urlRastreio;
-	}
-
-	public void setUrlRastreio(String urlRastreio) {
-		this.urlRastreio = urlRastreio;
-	}
-
 	public String getServicoTransportadora() {
 		return servicoTransportadora;
 	}
