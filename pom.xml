@@ -15,8 +15,9 @@
 	<name>loja_virtual_mentoria</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
-		<java.version>1.8</java.version>
-		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
+		<java.version>11</java.version>
+        <maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
+		
 	</properties>
 	<dependencies>
 		<dependency>
