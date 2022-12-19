@@ -14,6 +14,7 @@ import mentoria.lojavirtual.model.Endereco;
 import mentoria.lojavirtual.model.PessoaFisica;
 import mentoria.lojavirtual.model.PessoaJuridica;
 import mentoria.lojavirtual.repository.PessoaRepository;
+import mentoria.lojavirtual.service.ServiceJunoBoleto;
 
 @Profile("test")
 @SpringBootTest(classes = LojaVirtualMentoriaApplication.class)
@@ -25,6 +26,15 @@ public class TestePessoaUsuario extends TestCase{
 	
 	@Autowired
 	private PessoaRepository pessoaRepository;
+	
+	@Autowired
+	private ServiceJunoBoleto serviceJunoBoleto;
+	
+	@Test
+	public void testeToken() throws Exception {
+		String valor = serviceJunoBoleto.geraChaveBoletoPix();
+		System.out.println(valor);
+	}
 	
 	@Test
 	public void testCadPessoaJuridica() throws ExceptionMentoriaJava {

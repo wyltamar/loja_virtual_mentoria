@@ -12,6 +12,7 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
+import mentoria.lojavirtual.enums.ApiTokenIntegracao;
 import mentoria.lojavirtual.model.AccessTokenJunoAPI;
 import mentoria.lojavirtual.repository.AccessTokenJunoRepository;
 
@@ -24,6 +25,23 @@ public class ServiceJunoBoleto implements Serializable {
 	private AccessTokenJunoService accessTokenJunoService;
 	
 	private AccessTokenJunoRepository accessTokenJunoRepository;
+	
+	public String geraChaveBoletoPix() throws Exception {
+		
+		AccessTokenJunoAPI accessTokenJunoAPI = this.obterTokenApiJuno();
+		Client client = new HostIgnoringCliente("https://api.juno.com.br/").hostIgnoringCliente();
+		WebResource webResource = client.resource("https://api.juno.com.br/pix/keys");
+		
+		ClientResponse clientResponse = webResource
+				.accept("Content-Type","application/json")
+				.header("X-API-Version", 2)
+				.header("X-Resource-Token",ApiTokenIntegracao.TOKEN_PRIVATE_JUNO)
+				.header("Authorization", " Bearer " +accessTokenJunoAPI.getAccess_token())
+				.header("X-Idempotency-Key", "chave_boleto_pix")
+				.post(ClientResponse.class,"{ \"type\": \"RANDOM_KEY\" }" );
+		
+		return clientResponse.getEntity(String.class);
+	}
 	
 	public AccessTokenJunoAPI obterTokenApiJuno() throws Exception {
 		
