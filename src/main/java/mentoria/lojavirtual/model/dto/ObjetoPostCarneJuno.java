@@ -30,6 +30,10 @@ public class ObjetoPostCarneJuno implements Serializable {
 	
 	private Long idVenda;
 	
+	public void setEmail(String email) {
+		Email = email;
+	}
+
 	public void setIdVenda(Long idVenda) {
 		this.idVenda = idVenda;
 	}
