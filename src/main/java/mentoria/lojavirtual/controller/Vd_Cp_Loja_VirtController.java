@@ -43,6 +43,7 @@ import mentoria.lojavirtual.model.dto.EnvioEtiquetaDTO;
 import mentoria.lojavirtual.model.dto.ItemVendaDTO;
 import mentoria.lojavirtual.model.dto.ObjCancelaEtiquetaDTO;
 import mentoria.lojavirtual.model.dto.ObjRetornoCancelamentoEtiquetaDTO;
+import mentoria.lojavirtual.model.dto.ObjetoPostCarneJuno;
 import mentoria.lojavirtual.model.dto.ProductEnvioEtiquetaDTO;
 import mentoria.lojavirtual.model.dto.RelatorioCompraCanceladaDTO;
 import mentoria.lojavirtual.model.dto.TagEnvioEtiquetaDTO;
@@ -56,6 +57,7 @@ import mentoria.lojavirtual.repository.Vd_Cp_Loja_VirtRepository;
 import mentoria.lojavirtual.service.ConsultaFreteService;
 import mentoria.lojavirtual.service.EtiquetaService;
 import mentoria.lojavirtual.service.ListarAgenciaTransportadoraService;
+import mentoria.lojavirtual.service.ServiceJunoBoleto;
 import mentoria.lojavirtual.service.ServiceSendEmail;
 import mentoria.lojavirtual.service.VendaService;
 import okhttp3.OkHttpClient;
@@ -100,6 +102,9 @@ public class Vd_Cp_Loja_VirtController {
 	
 	@Autowired
 	private EtiquetaService etiquetaService;
+	
+	@Autowired
+	private ServiceJunoBoleto serviceJunoBoleto;
 	
 	@ResponseBody
 	@PostMapping(value = "**/relatorioStatusVendaLoja")
@@ -458,6 +463,13 @@ public class Vd_Cp_Loja_VirtController {
 		
 
 		return new ResponseEntity<List<VendaCompraLojaVirtualDTO>>(compraLojaVirtualDTOList, HttpStatus.OK);
+	}
+	
+	@ResponseBody
+	@PostMapping(value = "**/gerarBoletoPix")
+	public ResponseEntity<String> gerarBoletoPix(@RequestBody @Valid ObjetoPostCarneJuno objetoPostCarneJuno) throws Exception{
+		
+		return new ResponseEntity<String>(serviceJunoBoleto.gerarCarneApi(objetoPostCarneJuno), HttpStatus.OK);
 	}
 	
 	@ResponseBody
