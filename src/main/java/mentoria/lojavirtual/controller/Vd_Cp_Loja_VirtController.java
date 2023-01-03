@@ -472,6 +472,11 @@ public class Vd_Cp_Loja_VirtController {
 		return new ResponseEntity<String>(serviceJunoBoleto.gerarCarneApi(objetoPostCarneJuno), HttpStatus.OK);
 	}
 	
+	public ResponseEntity<String> cancelarBoletoPix(@RequestBody String code) throws Exception{
+		
+		return new ResponseEntity<String>(serviceJunoBoleto.cancelarBoletoPix(code), HttpStatus.OK);
+	}
+	
 	@ResponseBody
 	@PostMapping(value = "**/calcular-frete")
 	public ResponseEntity<List<EmpresaTransporteDTO>> calcularFrete(@RequestBody ConsultaFreteDTO consultaFreteDTO) throws IOException{

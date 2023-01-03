@@ -49,6 +49,28 @@ public class ServiceJunoBoleto implements Serializable {
 	@Autowired
 	private BoletoJunoRepository boletoJunoRepository;
 	
+	public String cancelarBoletoPix(String code) throws Exception {
+		
+		AccessTokenJunoAPI accessTokenJunoAPI = this.obterTokenApiJuno();
+		
+			
+			Client client = new HostIgnoringCliente("https://api.juno.com.br/").hostIgnoringCliente();
+			WebResource webResource = client.resource("https://api.juno.com.br/charges/"+code+"/cancelation");
+			
+			ClientResponse clientResponse = webResource.accept(MediaType.APPLICATION_JSON)
+					.header("X-Api-Version",2)
+					.header("X-Resource-Token",ApiTokenIntegracao.TOKEN_PRIVATE_JUNO)
+					.header("Authorization", " Bearer " +accessTokenJunoAPI.getAccess_token())
+					.post(ClientResponse.class);
+			
+			if(clientResponse.getStatus() == 204) {
+				return "Boleto de código "+ code + "cancelado com sucesso!";
+			}		
+				
+			return clientResponse.getEntity(String.class);
+			
+	}
+	
 	public String gerarCarneApi(ObjetoPostCarneJuno objetoPostCarneJuno) throws Exception {
 		
 		VendaCompraLojaVirtual vendaCompraLojaVirtual = vd_Cp_Loja_VirtRepository.findById(objetoPostCarneJuno.getIdVenda()).get();
